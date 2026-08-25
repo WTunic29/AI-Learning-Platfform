@@ -3,6 +3,8 @@ package co.edu.unipiloto.ailearning.api.controller;
 import co.edu.unipiloto.ailearning.api.dto.RegisterRequest;
 import co.edu.unipiloto.ailearning.api.model.Usuario;
 import co.edu.unipiloto.ailearning.api.service.AuthService;
+import co.edu.unipiloto.ailearning.api.dto.LoginRequest;
+import co.edu.unipiloto.ailearning.api.dto.LoginResponse;
 
 import jakarta.validation.Valid;
 
@@ -37,6 +39,34 @@ public class AuthController {
 
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
+                    .body(e.getMessage());
+
+        }
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+
+        try {
+
+            Usuario usuario = authService.login(request); //
+
+            LoginResponse response = new LoginResponse(
+
+                    usuario.getId(),
+                    usuario.getNombre(),
+                    usuario.getCorreo(),
+                    usuario.getRol()
+
+            );
+
+            return ResponseEntity.ok(response);
+
+        }catch (RuntimeException e){
+
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
                     .body(e.getMessage());
 
         }

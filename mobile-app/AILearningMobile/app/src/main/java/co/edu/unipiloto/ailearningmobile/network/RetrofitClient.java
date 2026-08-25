@@ -1,4 +1,49 @@
 package co.edu.unipiloto.ailearningmobile.network;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
+
+    private static final String BASE_URL = "http://10.0.2.2:8080/";  //ip del emulador
+    private static Retrofit retrofit;
+    private static Retrofit getRetrofitInstance(){
+
+        if (retrofit == null){
+
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(); // muestra en logcat la peticion y respuesta
+
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            OkHttpClient client = new OkHttpClient.Builder() // cliente interno http usado por retrofit de manera interna
+                    .proxy(java.net.Proxy.NO_PROXY)
+                    .addInterceptor(logging)
+                    .connectTimeout(15, TimeUnit.SECONDS)
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .build();
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(client) // AQUÍ ESTABA EL ERROR
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+        }
+
+        return retrofit;
+    }
+
+    //esta seccion le pide a retrofit que cree una implementacion de ApiService
+    public static ApiService getApiService(){
+
+        return getRetrofitInstance()
+                .create(ApiService.class); //genera una implementacion que entiende las anotaciones @POST @Body
+
+    }
+
 }

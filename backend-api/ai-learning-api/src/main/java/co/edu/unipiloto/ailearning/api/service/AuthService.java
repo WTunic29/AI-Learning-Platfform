@@ -1,5 +1,6 @@
 package co.edu.unipiloto.ailearning.api.service;
 
+import co.edu.unipiloto.ailearning.api.dto.LoginRequest;
 import co.edu.unipiloto.ailearning.api.dto.RegisterRequest;
 import co.edu.unipiloto.ailearning.api.model.Usuario;
 import co.edu.unipiloto.ailearning.api.repository.UsuarioRepository;
@@ -42,6 +43,25 @@ public class AuthService {
         usuario.setRol("ESTUDIANTE");
 
         return usuarioRepository.save(usuario);
+
+    }
+
+    public Usuario login(LoginRequest request){
+
+        Usuario usuario = usuarioRepository
+                .findByCorreo(request.getCorreo()) //busca si existe el correo en la DB
+                .orElseThrow(() ->
+                        new RuntimeException("Credenciales inválidas"));
+
+        if (!passwordEncoder.matches( //matches hace la comparacion entre la contraseña - Bcrypt y el hash almacenado
+                request.getPassword(),
+                usuario.getPasswordHash())){
+
+                    throw  new RuntimeException("Credenciales inválidas");
+
+        }
+
+        return usuario;
 
     }
 
