@@ -9,7 +9,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://10.0.2.2:8080/";  //ip del emulador
+    private static final String BASE_URL = "http://127.0.0.1:8080/";  //hay que mantener activo el adb reverse, ya que es el puente entre la ip del pixel8 y el server
+    //& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" devices
+    //& "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" reverse tcp:8080 tcp:8080
     private static Retrofit retrofit;
     private static Retrofit getRetrofitInstance(){
 

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Intent;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,21 +32,26 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(R.id.main),
+        // probarConexionDirecta(); Test sockets
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main),
                 (v, insets) -> {
 
-                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars()                    );
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
 
-                    v.setPadding(
-                            systemBars.left,
+                    );
+
+                    v.setPadding(systemBars.left,
                             systemBars.top,
                             systemBars.right,
                             systemBars.bottom
+
                     );
 
                     return insets;
                 }
+
         );
 
         // Referencias a los elementos de la pantalla
@@ -57,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
 
             String correo = editCorreo.getText().toString().trim();
-            String password = editPassword.getText().toString();
+            String password = editPassword.getText().toString().trim();
 
+            /*
             // Validación básica
             if (correo.isEmpty() || password.isEmpty()) {
 
@@ -70,29 +77,49 @@ public class MainActivity extends AppCompatActivity {
 
                 return;
             }
+            */
 
             // Crear la petición
-            LoginRequest request = new LoginRequest(
-                    correo,
-                    password
-            );
+            LoginRequest request = new LoginRequest(correo, password);
 
-            ApiService apiService = RetrofitClient.getApiService(); // Obtener el servicio Retrofit
-            Call<LoginResponse> call = apiService.login(request); // Crear la llamada
-            call.enqueue(new Callback<LoginResponse>() { //Le dice a retrofit que ejecute la peticion de manera asincrona... para que la app no se congele
+            ApiService apiService = RetrofitClient.getApiService();// Obtener el servicio Retrofit
+            Call<LoginResponse> call = apiService.login(request);// Le dice a Retrofit que ejecute la petición de manera asíncrona
+            // para que la app no se congele
+            call.enqueue(new Callback<LoginResponse>() {
 
                 @Override
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
 
-                    if (response.isSuccessful()) {
+                    if (response.isSuccessful() && response.body() != null) {
 
                         LoginResponse loginResponse = response.body();
 
                         Log.d(
+
                                 "LOGIN",
-                                "Login exitoso: "
-                                        + loginResponse.getNombre()
+                                "Login exitoso: " + loginResponse.getNombre()
+
                         );
+
+                        Toast.makeText(MainActivity.this,
+                                "Bienvenido" + loginResponse.getNombre(),
+                                Toast.LENGTH_SHORT
+
+                        ).show();
+
+                        //aqui dice quiero ir de MainActivity a Home
+                        Intent intent = new Intent(
+                                MainActivity.this,
+                                Home.class
+                        );
+
+                       intent.putExtra(
+                               "nombre",
+                               loginResponse.getNombre()
+                        );
+
+                       startActivity(intent);
+                       finish();
 
                     } else {
 
@@ -101,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
                                 "Error HTTP: " + response.code()
                         );
 
+                        Toast.makeText(
+
+                                MainActivity.this,
+                                "Correo o contraseña invalidos: " + response.code(),
+                                Toast.LENGTH_SHORT
+
+                        ).show();
+
                     }
 
                 }
@@ -108,11 +143,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<LoginResponse> call, Throwable t) {
 
-                    Log.e(
-                            "LOGIN",
-                            "Error de conexión",
-                            t
-                    );
+                    Log.e("LOGIN", "Error de conexión", t);
+
+                    Toast.makeText(MainActivity.this,
+                            "No se pudo conectar con el servidor",
+                            Toast.LENGTH_SHORT
+
+                    ).show();
 
                 }
 
@@ -122,4 +159,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // PRUEBA SOCKETS
+    /*
+    private void probarConexionDirecta() {
+
+        new Thread(() -> {
+
+            try {
+
+                java.net.Socket socket = new java.net.Socket();
+
+                socket.connect(
+                        new java.net.InetSocketAddress(
+                                "127.0.0.1",
+                                8080
+                        ),
+                        5000
+                );
+
+                Log.d(
+                        "TEST_SOCKET",
+                        "CONEXION TCP EXITOSA"
+                );
+
+                socket.close();
+
+            } catch (Exception e) {
+
+                Log.e(
+                        "TEST_SOCKET",
+                        "CONEXION TCP FALLIDA",
+                        e
+                );
+            }
+
+        }).start();
+    }
+    */
 }
