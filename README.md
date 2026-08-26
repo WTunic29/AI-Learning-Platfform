@@ -6,7 +6,7 @@ Este repositorio contiene el desarrollo correspondiente al **Sprint 1**, enfocad
 
 ---
 
-## 📌 Estado actual del proyecto
+## Estado actual del proyecto
 
 ### Sprint 1 — Autenticación y gestión básica de usuarios
 
@@ -30,7 +30,7 @@ El sistema permite actualmente:
 
 ---
 
-# 🏗️ Arquitectura del sistema
+# Arquitectura del sistema
 
 El proyecto utiliza una arquitectura **cliente-servidor**, donde la aplicación Android funciona como cliente y el backend desarrollado con Spring Boot proporciona una API REST.
 
@@ -115,7 +115,7 @@ Base de datos relacional utilizada para almacenar la información de usuarios. L
 
 ---
 
-# 📱 Arquitectura Android
+# Arquitectura Android
 
 La aplicación móvil utiliza Java, Android Studio, Android SDK, Retrofit y OkHttp.
 
@@ -173,7 +173,7 @@ AI-Learning-Mobile/
 
 ---
 
-# 🔐 HU-01 — Registro de usuario
+# HU-01 — Registro de usuario
 
 ## Descripción
 
@@ -221,7 +221,7 @@ Content-Type: application/json
 
 ---
 
-# 🔑 HU-02 — Inicio de sesión
+# HU-02 — Inicio de sesión
 
 ## Descripción
 
@@ -270,7 +270,7 @@ exitoso
 
 ---
 
-# 🔒 BCrypt
+# BCrypt
 
 El sistema utiliza BCrypt para proteger las contraseñas almacenadas.
 
@@ -294,7 +294,7 @@ Login      Error
 
 ---
 
-# 🌐 Comunicación REST
+# Comunicación REST
 
 La aplicación Android consume el backend mediante una API REST y JSON.
 
@@ -317,7 +317,7 @@ PostgreSQL
 
 ---
 
-# 🔌 Retrofit y OkHttp
+# Retrofit y OkHttp
 
 Retrofit permite definir los endpoints mediante interfaces:
 
@@ -349,7 +349,7 @@ Spring Boot
 
 ---
 
-# 🔄 Configuración de comunicación local
+# Configuración de comunicación local
 
 Durante las pruebas con el emulador Android se utilizó:
 
@@ -367,7 +367,7 @@ cuando el redireccionamiento mediante `adb reverse` está activo.
 
 ---
 
-# 🧪 Pruebas realizadas
+# Pruebas realizadas
 
 Las funcionalidades del Sprint fueron probadas utilizando:
 
@@ -388,13 +388,13 @@ Spring Boot
 PostgreSQL
 ```
 
-**Resultado:** ✅ Exitoso.
+**Resultado:** Exitoso.
 
 ## Caso 2 — Registro con correo existente
 
 Se intenta registrar nuevamente un usuario con un correo que ya existe.
 
-**Resultado:** ✅ Validado.
+**Resultado:** Validado.
 
 ## Caso 3 — Login correcto
 
@@ -417,23 +417,23 @@ Logcat:
 Login exitoso: Christian
 ```
 
-**Resultado:** ✅ Exitoso.
+**Resultado:** Exitoso.
 
 ## Caso 4 — Contraseña incorrecta
 
 Se utiliza un correo válido junto con una contraseña incorrecta.
 
-**Resultado:** ✅ Validado.
+**Resultado:** Validado.
 
 ## Caso 5 — Servidor apagado
 
 Cuando el backend no está disponible, Android detecta el fallo mediante el callback de Retrofit.
 
-**Resultado:** ✅ Validado.
+**Resultado:** Validado.
 
 ---
 
-# 🧰 Herramientas utilizadas
+# Herramientas utilizadas
 
 | Herramienta | Función |
 |---|---|
@@ -446,7 +446,7 @@ Cuando el backend no está disponible, Android detecta el fallo mediante el call
 
 ---
 
-# ⚙️ Tecnologías
+# Tecnologías
 
 ## Android
 
@@ -478,7 +478,7 @@ Cuando el backend no está disponible, Android detecta el fallo mediante el call
 
 ---
 
-# 🗄️ Base de datos
+# Base de datos
 
 La persistencia utiliza:
 
@@ -500,7 +500,7 @@ Usuario
 
 ---
 
-# 🔐 Configuración y seguridad
+# Configuración y seguridad
 
 Las credenciales reales de la base de datos no deben almacenarse en el repositorio público.
 
@@ -528,7 +528,7 @@ El archivo con credenciales reales debe estar incluido en `.gitignore`.
 
 ---
 
-# 🚀 Ejecución del Backend
+# Ejecución del Backend
 
 ## Requisitos
 
@@ -559,7 +559,7 @@ http://localhost:8080
 
 ---
 
-# 📱 Ejecución de Android
+# Ejecución de Android
 
 ## Requisitos
 
@@ -585,7 +585,7 @@ adb reverse tcp:8080 tcp:8080
 
 ---
 
-# 🧭 Alcance del Sprint
+# Alcance del Sprint
 
 ## Incluido
 
@@ -616,7 +616,7 @@ Estas funcionalidades podrán incorporarse en futuros Sprints.
 
 ---
 
-# 🔮 Próximos Sprints
+# Próximos Sprints
 
 ```text
 Sprint 1
@@ -648,65 +648,65 @@ Sprints posteriores
 
 ---
 
-# ✅ Definition of Done
+# Definition of Done
 
 ## Infraestructura
 
-- [x] Android Studio configurado.
-- [x] IntelliJ IDEA configurado.
-- [x] JDK 21 configurado.
-- [x] PostgreSQL configurado.
-- [x] Git configurado.
-- [x] Postman configurado.
+-  Android Studio configurado.
+-  IntelliJ IDEA configurado.
+-  JDK 21 configurado.
+-  PostgreSQL configurado.
+-  Git configurado.
+-  Postman configurado.
 
 ## Backend
 
-- [x] Spring Boot funcionando.
-- [x] PostgreSQL conectado.
-- [x] Spring Data JPA configurado.
-- [x] Entidad `Usuario`.
-- [x] `UsuarioRepository`.
-- [x] DTOs.
-- [x] `AuthService`.
-- [x] `AuthController`.
-- [x] BCrypt.
+-  Spring Boot funcionando.
+-  PostgreSQL conectado.
+-  Spring Data JPA configurado.
+-  Entidad `Usuario`.
+-  `UsuarioRepository`.
+-  DTOs.
+-  `AuthService`.
+-  `AuthController`.
+-  BCrypt.
 
 ## HU-01
 
-- [x] Endpoint de registro.
-- [x] Registro de usuarios.
-- [x] Validación de correo.
-- [x] Correo único.
-- [x] Hash de contraseña.
-- [x] Persistencia en PostgreSQL.
-- [x] Prueba mediante Postman.
-- [x] Prueba desde Android.
+-  Endpoint de registro.
+-  Registro de usuarios.
+-  Validación de correo.
+-  Correo único.
+-  Hash de contraseña.
+-  Persistencia en PostgreSQL.
+-  Prueba mediante Postman.
+-  Prueba desde Android.
 
 ## HU-02
 
-- [x] Endpoint de login.
-- [x] Búsqueda de usuario.
-- [x] Validación de contraseña.
-- [x] BCrypt.
-- [x] Respuesta de autenticación.
-- [x] Prueba mediante Postman.
-- [x] Prueba desde Android.
-- [x] Manejo de errores.
-- [x] Comunicación Android-Backend.
+-  Endpoint de login.
+-  Búsqueda de usuario.
+-  Validación de contraseña.
+-  BCrypt.
+-  Respuesta de autenticación.
+-  Prueba mediante Postman.
+-  Prueba desde Android.
+-  Manejo de errores.
+-  Comunicación Android-Backend.
 
 ## Entrega
 
-- [x] Pruebas Postman.
-- [x] Pruebas Android.
-- [x] Evidencias.
-- [x] Código funcional.
-- [x] README.
-- [ ] Commit final.
-- [ ] Push final a GitHub.
+-  Pruebas Postman.
+-  Pruebas Android.
+-  Evidencias.
+-  Código funcional.
+-  README.
+-  Commit final.
+-  Push final a GitHub.
 
 ---
 
-# 🌿 Control de versiones
+#  Control de versiones
 
 Antes de realizar la entrega:
 
@@ -736,7 +736,7 @@ Antes del `push`, verificar que no se incluyan `application.properties` ni otros
 
 ---
 
-# 🎯 Resultado final del Sprint 1
+# Resultado final del Sprint 1
 
 El Sprint establece una primera versión funcional de **AI Learning Platform**:
 
@@ -785,7 +785,7 @@ Con esto se establece la base técnica necesaria para continuar con los siguient
 
 ---
 
-# 👨‍💻 Proyecto
+# Proyecto
 
 **AI Learning Platform**
 
@@ -819,6 +819,6 @@ PostgreSQL
 
 ---
 
-## 📌 Nota
+## Nota
 
 Este README documenta el alcance y la arquitectura correspondiente al **primer Sprint**. Las funcionalidades adicionales serán incorporadas progresivamente en los siguientes incrementos del proyecto.
