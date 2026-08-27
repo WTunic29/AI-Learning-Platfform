@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
         EditText editCorreo = findViewById(R.id.editCorreo);
         EditText editPassword = findViewById(R.id.editPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
+        TextView tvCrearCuenta = findViewById(R.id.tvCrearCuenta);
+
+        tvCrearCuenta.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    RegisterActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         // Acción del botón Iniciar sesión
         btnLogin.setOnClickListener(v -> {
