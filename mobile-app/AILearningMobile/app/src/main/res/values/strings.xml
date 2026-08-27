@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">AILearningMobile</string>
+    <string name="app_name">Nexalearn</string>
+    <string name="login_title">Nexalearn</string>
+    <string name="welcome_title">Bienvenido a Nexalearn</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="logout_button">Cerrar sesión</string>
 </resources>
