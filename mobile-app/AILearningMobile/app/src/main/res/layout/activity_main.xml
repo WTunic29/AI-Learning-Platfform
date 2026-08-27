@@ -1,51 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center">
+    android:background="#EEF3FF">
 
     <TextView
+        android:id="@+id/tvMarcaAgua"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nexalearn"
-        android:textSize="28sp"
+        android:text="N"
+        android:textSize="220sp"
         android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
+        android:textColor="#12000000"
+        android:rotation="-12"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:id="@+id/editCorreo"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLogin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Correo"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <EditText
-        android:id="@+id/editPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:layout_marginBottom="24dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="28dp">
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Iniciar sesión"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nexalearn"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="#1E2A78"
+                android:gravity="center" />
 
-    <TextView
-        android:id="@+id/tvCrearCuenta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿No tienes cuenta? Crear cuenta"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        android:padding="8dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Aprende, avanza y conecta"
+                android:textSize="15sp"
+                android:textColor="#6B7280"
+                android:gravity="center" />
 
-</LinearLayout>
+            <EditText
+                android:id="@+id/editCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="30dp"
+                android:hint="Correo electrónico"
+                android:inputType="textEmailAddress"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/bg_input"
+                android:textColor="#111827"
+                android:textColorHint="#9CA3AF" />
+
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/bg_input"
+                android:textColor="#111827"
+                android:textColorHint="#9CA3AF" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Iniciar sesión"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4F46E5" />
+
+            <TextView
+                android:id="@+id/tvCrearCuenta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="¿No tienes cuenta? Crear cuenta"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#4F46E5"
+                android:gravity="center"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
