@@ -16,12 +16,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import co.edu.unipiloto.ailearningmobile.dto.LoginRequest;
 import co.edu.unipiloto.ailearningmobile.dto.LoginResponse;
+import co.edu.unipiloto.ailearningmobile.dto.CambiarRolRequest;
 import co.edu.unipiloto.ailearningmobile.network.ApiService;
 import co.edu.unipiloto.ailearningmobile.network.RetrofitClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import okhttp3.ResponseBody;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -170,7 +173,54 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    private void cammbiarRolUsuario(Long id, String rol){
 
+        CambiarRolRequest request = new CambiarRolRequest(rol);
+        ApiService apiService = RetrofitClient.getApiService();
+
+        Call<ResponseBody> call = apiService.cambiarRol(id, request);
+        call.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if (response.isSuccessful()){
+
+                    Log.d("CAMBIAR_ROL", "Rol cambiado correctamente");
+
+                    Toast.makeText(MainActivity.this,
+                            "Rol cambiado a " + rol,
+                            Toast.LENGTH_SHORT)
+                            .show();
+
+                }else {
+
+                    Log.e("CAMBIAR_ROL", "Error HTTP: " + response.code());
+
+                    Toast.makeText(MainActivity.this,
+                            "Error al cambiar rol: " + response.code(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Log.e("CAMBIAR_ROL", "Error de conexión", t);
+
+                Toast.makeText(MainActivity.this,
+                        "No se pudo conectar con el servidor",
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+            }
+
+        });
+
+    }
     // PRUEBA SOCKETS
     /*
     private void probarConexionDirecta() {

@@ -12,6 +12,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
+backend-api/ai-learning-api/^Cc/main/resources/application.properties
+
 
 ### IntelliJ IDEA ###
 .idea
