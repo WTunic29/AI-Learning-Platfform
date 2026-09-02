@@ -1,6 +1,5 @@
 package co.edu.unipiloto.ailearning.api.dto;
 
-//Necesitamos separar  informacion interna de la DB de la que exponemos mediante la API
 public class LoginResponse {
 
     private Long id;
@@ -8,13 +7,19 @@ public class LoginResponse {
     private String correo;
     private String rol;
 
-    public LoginResponse(Long id, String nombre, String correo, String rol){
+    public LoginResponse() {
+    }
+
+    public LoginResponse(
+            Long id,
+            String nombre,
+            String correo,
+            String rol) {
 
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.rol = rol;
-
     }
 
     public Long getId() {
@@ -32,5 +37,4 @@ public class LoginResponse {
     public String getRol() {
         return rol;
     }
-
 }

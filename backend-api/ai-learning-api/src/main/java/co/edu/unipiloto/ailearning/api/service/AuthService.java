@@ -16,19 +16,16 @@ public class AuthService {
 
     public AuthService(
             UsuarioRepository usuarioRepository,
-            PasswordEncoder passwordEncoder){
+            PasswordEncoder passwordEncoder) {
 
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
-
     }
 
-    public Usuario registrar(RegisterRequest request){
+    public Usuario registrar(RegisterRequest request) {
 
         if (usuarioRepository.existsByCorreo(request.getCorreo())) {
-
             throw new RuntimeException("El correo ya está registrado");
-
         }
 
         Usuario usuario = new Usuario();
@@ -36,33 +33,30 @@ public class AuthService {
         usuario.setNombre(request.getNombre());
         usuario.setCorreo(request.getCorreo());
 
-        //Transforma una contraseña en un BCrypt... La contraseña original no se almacena
-        String passwordHash = passwordEncoder.encode(request.getPassword());
+        String passwordHash =
+                passwordEncoder.encode(request.getPassword());
 
         usuario.setPasswordHash(passwordHash);
         usuario.setRol("ESTUDIANTE");
 
         return usuarioRepository.save(usuario);
-
     }
 
-    public Usuario login(LoginRequest request){
+    public Usuario login(LoginRequest request) {
 
         Usuario usuario = usuarioRepository
-                .findByCorreo(request.getCorreo()) //busca si existe el correo en la DB
+                .findByCorreo(request.getCorreo())
                 .orElseThrow(() ->
-                        new RuntimeException("Credenciales inválidas"));
+                        new RuntimeException("Credenciales inválidas")
+                );
 
-        if (!passwordEncoder.matches( //matches hace la comparacion entre la contraseña - Bcrypt y el hash almacenado
+        if (!passwordEncoder.matches(
                 request.getPassword(),
-                usuario.getPasswordHash())){
+                usuario.getPasswordHash())) {
 
-                    throw  new RuntimeException("Credenciales inválidas");
-
+            throw new RuntimeException("Credenciales inválidas");
         }
 
         return usuario;
-
     }
-
 }

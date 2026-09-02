@@ -3,7 +3,6 @@ package co.edu.unipiloto.ailearning.api.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-//Definiremos que info necesita el login
 public class LoginRequest {
 
     @NotBlank
@@ -12,6 +11,9 @@ public class LoginRequest {
 
     @NotBlank
     private String password;
+
+    public LoginRequest() {
+    }
 
     public String getCorreo() {
         return correo;

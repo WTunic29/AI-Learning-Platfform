@@ -1,14 +1,12 @@
 package co.edu.unipiloto.ailearningmobile.dto;
 
-public class LoginResponse {
+public class UsuarioResponse {
 
     private Long id;
     private String nombre;
     private String correo;
     private String rol;
-
-    public LoginResponse() {
-    }
+    private String fechaRegistro;
 
     public Long getId() {
         return id;
@@ -24,5 +22,9 @@ public class LoginResponse {
 
     public String getRol() {
         return rol;
+    }
+
+    public String getFechaRegistro() {
+        return fechaRegistro;
     }
 }

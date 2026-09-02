@@ -20,6 +20,7 @@ public class Home extends AppCompatActivity {
 
         setContentView(R.layout.activity_home);
         TextView textUsuario = findViewById(R.id.textUsuario);
+        Button btnBuscarUsuario = findViewById(R.id.btnBuscarUsuario);
         Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
         // Obtener el nombre enviado desde MainActivity
@@ -30,6 +31,14 @@ public class Home extends AppCompatActivity {
             textUsuario.setText("Bienvenido, " + nombre);
 
         }
+
+                btnBuscarUsuario.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    Home.this,
+                    BuscarUsuarioActivity.class
+            );
+            startActivity(intent);
+        });
 
         // Cerrar sesión
         btnCerrarSesion.setOnClickListener(v -> {
