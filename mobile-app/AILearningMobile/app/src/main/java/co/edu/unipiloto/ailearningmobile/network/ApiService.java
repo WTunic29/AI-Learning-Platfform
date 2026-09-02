@@ -8,6 +8,9 @@ import retrofit2.http.POST;
 import okhttp3.ResponseBody;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import java.util.List;
 
 //retrofit implementa las operaciones  para inicio de sesión
 public interface ApiService {
@@ -21,4 +24,10 @@ public interface ApiService {
     @PUT("api/usuarios/{id}/rol")
     Call<ResponseBody> cambiarRol(@Path("id") Long id, @Body CambiarRolRequest request);
 
+    @GET("api/usuarios/buscar")
+    Call<List<UsuarioResponse>> buscarUsuarios(
+            @Query("termino") String termino
+    );
+
 }
+

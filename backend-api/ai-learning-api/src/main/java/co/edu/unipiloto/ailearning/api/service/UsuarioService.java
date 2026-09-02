@@ -4,6 +4,8 @@ import co.edu.unipiloto.ailearning.api.model.Usuario;
 import co.edu.unipiloto.ailearning.api.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import java.util.List;
+import co.edu.unipiloto.ailearning.api.dto.UsuarioResponse;
 
 @Service
 public class UsuarioService {
@@ -39,5 +41,22 @@ public class UsuarioService {
         return  usuarioRepository.save(usuario);
 
     }
+    public List<UsuarioResponse> buscarUsuarios(String termino) {
+
+    if (termino == null || termino.trim().isEmpty()) {
+        return List.of();
+    }
+
+    String busqueda = termino.trim();
+
+    return usuarioRepository
+            .findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(
+                    busqueda,
+                    busqueda
+            )
+            .stream()
+            .map(UsuarioResponse::new)
+            .toList();
+}
 
 }

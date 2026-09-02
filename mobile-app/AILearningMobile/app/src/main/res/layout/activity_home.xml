@@ -36,8 +36,14 @@
 
         />
 
-    <Button
+        <Button
+        android:id="@+id/btnBuscarUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar usuario"
+        android:layout_marginBottom="16dp" />
 
+    <Button
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
