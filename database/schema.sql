@@ -9,6 +9,8 @@ CREATE TABLE usuarios (
 
 SELECT*FROM usuarios;
 
+SELECT*FROM cursos;
+
 SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'usuarios';
@@ -17,3 +19,31 @@ SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_name = 'usuarios'
 ORDER BY ordinal_position;
+
+INSERT INTO cursos (nombre, descripcion, categoria)
+VALUES
+(
+    'Introducción a la Inteligencia Artificial',
+    'Curso básico sobre los fundamentos de la inteligencia artificial, sus conceptos principales y aplicaciones.',
+    'Tecnología'
+),
+(
+    'Programación en Java',
+    'Curso sobre fundamentos de programación orientada a objetos utilizando el lenguaje Java.',
+    'Programación'
+),
+(
+    'Bases de Datos Relacionales',
+    'Curso introductorio sobre modelado, consultas SQL y administración de bases de datos relacionales.',
+    'Bases de Datos'
+),
+(
+    'Desarrollo de Aplicaciones Android',
+    'Curso sobre creación de aplicaciones móviles utilizando Android Studio y Java.',
+    'Desarrollo Móvil'
+),
+(
+    'Fundamentos de Redes',
+    'Curso sobre conceptos básicos de redes, protocolos de comunicación y arquitectura cliente-servidor.',
+    'Redes'
+);
