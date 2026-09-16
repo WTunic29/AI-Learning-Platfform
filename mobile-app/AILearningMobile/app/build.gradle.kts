@@ -1,11 +1,33 @@
+import java.util.Properties
+
+val localProperties = Properties()
+
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { stream ->
+        localProperties.load(stream)
+    }
+}
+
+val apiBaseUrl = localProperties.getProperty(
+    "API_BASE_URL",
+    "http://10.0.2.2:8080/"
+)
+
 plugins {
     alias(libs.plugins.android.application)
 }
 
 android {
     namespace = "co.edu.unipiloto.ailearningmobile"
+
     compileSdk {
         version = release(37)
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     defaultConfig {
@@ -16,6 +38,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "API_BASE_URL",
+            "\"$apiBaseUrl\""
+        )
     }
 
     buildTypes {
@@ -25,6 +53,7 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

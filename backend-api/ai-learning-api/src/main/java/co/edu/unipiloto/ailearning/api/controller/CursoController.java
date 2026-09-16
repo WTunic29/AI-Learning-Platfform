@@ -4,10 +4,7 @@ import co.edu.unipiloto.ailearning.api.dto.CursoResponse;
 import co.edu.unipiloto.ailearning.api.service.CursoService;
 
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,11 +19,19 @@ public class CursoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CursoResponse>> obtenerCursis(){
+    public ResponseEntity<List<CursoResponse>> obtenerCursos(){
 
-        List<CursoResponse> cursos = cursoService.obtenerTodosLosCursos();
-        return ResponseEntity.ok(cursos);
-
+        return ResponseEntity.ok(
+                cursoService.obtenerTodosLosCursos()
+        );
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity<List<CursoResponse>> buscarCursos(
+            @RequestParam String termino){
+
+        return ResponseEntity.ok(
+                cursoService.buscarCursos(termino)
+        );
+    }
 }

@@ -12,7 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import java.util.List;
 
-//retrofit implementa las operaciones  para inicio de sesión
+//retrofit implementa las operaciones  para inicio de sesiÃ³n
 public interface ApiService {
 
     @POST("api/auth/login") //cuando alguien ejecuta el login, hace una peticion hacia la ruta
@@ -32,5 +32,11 @@ public interface ApiService {
     @GET("api/cursos")
     Call<List<CursoResponse>> obtenerCursos();
 
+    @GET("api/cursos/buscar")
+    Call<List<CursoResponse>> buscarCursos(
+            @Query("termino") String termino
+    );
+
 }
+
 

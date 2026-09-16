@@ -11,33 +11,46 @@ import java.util.stream.Collectors;
 @Service
 public class CursoService {
 
-    private final CursoRepository cursoRepository; //Guarda una referencia al repositorio para poder consultar la DB
-
+    private final CursoRepository cursoRepository;
 
     public CursoService(CursoRepository cursoRepository){
         this.cursoRepository = cursoRepository;
     }
 
-    // Este metodo devuelve una lista de respuestas de cursos
     public List<CursoResponse> obtenerTodosLosCursos(){
 
-        return cursoRepository.findAll()// consulta todos los registros de la tabla cursos
+        return cursoRepository.findAll()
                 .stream()
-                .map(this::convertirAResponse) // convierte curso - cursoAResponse
+                .map(this::convertirAResponse)
                 .collect(Collectors.toList());
+    }
 
+    public List<CursoResponse> buscarCursos(String termino){
+
+        if (termino == null || termino.trim().isEmpty()) {
+            return obtenerTodosLosCursos();
+        }
+
+        String busqueda = termino.trim();
+
+        return cursoRepository
+                .findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrCategoriaContainingIgnoreCase(
+                        busqueda,
+                        busqueda,
+                        busqueda
+                )
+                .stream()
+                .map(this::convertirAResponse)
+                .collect(Collectors.toList());
     }
 
     private CursoResponse convertirAResponse(Curso curso){
 
         return new CursoResponse(
-
                 curso.getId(),
                 curso.getNombre(),
                 curso.getDescripcion(),
                 curso.getCategoria()
-
         );
-
     }
 }

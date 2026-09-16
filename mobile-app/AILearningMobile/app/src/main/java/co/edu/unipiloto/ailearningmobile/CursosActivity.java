@@ -2,6 +2,8 @@ package co.edu.unipiloto.ailearningmobile;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +25,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CursosActivity extends AppCompatActivity {
+
     private RecyclerView recyclerCursos;
     private ProgressBar progressCursos;
     private TextView tvMensajeCursos;
+    private EditText editBuscarCurso;
     private CursoAdapter cursoAdapter;
+
     private final List<CursoResponse> listaCursos = new ArrayList<>();
 
     @Override
@@ -38,67 +43,132 @@ public class CursosActivity extends AppCompatActivity {
         recyclerCursos = findViewById(R.id.recyclerCursos);
         progressCursos = findViewById(R.id.progressCursos);
         tvMensajeCursos = findViewById(R.id.tvMensajeCursos);
+        editBuscarCurso = findViewById(R.id.editBuscarCurso);
+
+        Button btnBuscarCurso = findViewById(R.id.btnBuscarCurso);
+        Button btnMostrarTodos = findViewById(R.id.btnMostrarTodos);
 
         recyclerCursos.setLayoutManager(new LinearLayoutManager(this));
 
         cursoAdapter = new CursoAdapter(listaCursos);
         recyclerCursos.setAdapter(cursoAdapter);
 
-        cargarCursos();
+        btnBuscarCurso.setOnClickListener(v -> buscarCursos());
 
+        btnMostrarTodos.setOnClickListener(v -> {
+            editBuscarCurso.setText("");
+            cargarCursos();
+        });
+
+        cargarCursos();
     }
 
     private void cargarCursos() {
 
-        progressCursos.setVisibility(View.VISIBLE);
-        tvMensajeCursos.setVisibility(View.GONE);
+        mostrarCargando();
 
         ApiService apiService = RetrofitClient.getApiService();
 
         apiService.obtenerCursos().enqueue(new Callback<List<CursoResponse>>() {
 
             @Override
-            public void onResponse(Call<List<CursoResponse>> call,
+            public void onResponse(
+                    Call<List<CursoResponse>> call,
                     Response<List<CursoResponse>> response) {
 
-                progressCursos.setVisibility(View.GONE);
-
-                if (response.isSuccessful() && response.body() != null) {
-
-                    listaCursos.clear();
-                    listaCursos.addAll(response.body());
-
-                    cursoAdapter.notifyDataSetChanged();
-
-                    if (listaCursos.isEmpty()) {
-
-                        tvMensajeCursos.setText("No hay cursos disponibles.");
-                        tvMensajeCursos.setVisibility(View.VISIBLE);
-
-                    }} else {
-
-                    tvMensajeCursos.setText("No se pudieron cargar los cursos.");
-                    tvMensajeCursos.setVisibility(View.VISIBLE);
-
-                }
-
+                procesarRespuesta(response, "No hay cursos disponibles.");
             }
 
             @Override
-            public void onFailure(Call<List<CursoResponse>> call, Throwable t) {
+            public void onFailure(
+                    Call<List<CursoResponse>> call,
+                    Throwable t) {
 
-                progressCursos.setVisibility(View.GONE);
-
-                tvMensajeCursos.setText("Error de conexión con el servidor.");
-                tvMensajeCursos.setVisibility(View.VISIBLE);
-
-                Toast.makeText(CursosActivity.this, "Error: " + t.getMessage(),
-                        Toast.LENGTH_LONG).show();
-
+                mostrarError("Error de conexión con el servidor.");
             }
-
         });
-
     }
 
+    private void buscarCursos() {
+
+        String termino = editBuscarCurso.getText().toString().trim();
+
+        if (termino.isEmpty()) {
+            cargarCursos();
+            return;
+        }
+
+        mostrarCargando();
+
+        ApiService apiService = RetrofitClient.getApiService();
+
+        apiService.buscarCursos(termino).enqueue(new Callback<List<CursoResponse>>() {
+
+            @Override
+            public void onResponse(
+                    Call<List<CursoResponse>> call,
+                    Response<List<CursoResponse>> response) {
+
+                procesarRespuesta(
+                        response,
+                        "No se encontraron cursos para: " + termino
+                );
+            }
+
+            @Override
+            public void onFailure(
+                    Call<List<CursoResponse>> call,
+                    Throwable t) {
+
+                mostrarError("Error de conexión con el servidor.");
+            }
+        });
+    }
+
+    private void procesarRespuesta(
+            Response<List<CursoResponse>> response,
+            String mensajeVacio) {
+
+        progressCursos.setVisibility(View.GONE);
+        tvMensajeCursos.setVisibility(View.GONE);
+
+        if (response.isSuccessful() && response.body() != null) {
+
+            listaCursos.clear();
+            listaCursos.addAll(response.body());
+
+            cursoAdapter.notifyDataSetChanged();
+
+            if (listaCursos.isEmpty()) {
+                tvMensajeCursos.setText(mensajeVacio);
+                tvMensajeCursos.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+
+            mostrarError(
+                    "No se pudieron cargar los cursos. Código: " +
+                    response.code()
+            );
+        }
+    }
+
+    private void mostrarCargando() {
+
+        progressCursos.setVisibility(View.VISIBLE);
+        tvMensajeCursos.setVisibility(View.GONE);
+    }
+
+    private void mostrarError(String mensaje) {
+
+        progressCursos.setVisibility(View.GONE);
+        tvMensajeCursos.setText(mensaje);
+        tvMensajeCursos.setVisibility(View.VISIBLE);
+
+        Toast.makeText(
+                CursosActivity.this,
+                mensaje,
+                Toast.LENGTH_LONG
+        ).show();
+    }
 }

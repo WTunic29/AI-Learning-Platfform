@@ -1,5 +1,7 @@
 package co.edu.unipiloto.ailearningmobile.network;
 
+import co.edu.unipiloto.ailearningmobile.BuildConfig;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -10,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "http://127.0.0.1:8080/";
+    private static final String BASE_URL = BuildConfig.API_BASE_URL;
 
     private static Retrofit retrofit;
 
@@ -53,3 +55,4 @@ public class RetrofitClient {
                 .create(ApiService.class);
     }
 }
+
