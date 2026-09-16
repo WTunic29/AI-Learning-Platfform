@@ -21,6 +21,7 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         TextView textUsuario = findViewById(R.id.textUsuario);
         Button btnBuscarUsuario = findViewById(R.id.btnBuscarUsuario);
+        Button btnCursos = findViewById(R.id.btnCursos);
         Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
         // Obtener el nombre enviado desde MainActivity
@@ -32,12 +33,21 @@ public class Home extends AppCompatActivity {
 
         }
 
-                btnBuscarUsuario.setOnClickListener(v -> {
+        // Buscar usuarios
+        btnBuscarUsuario.setOnClickListener(v -> {
             Intent intent = new Intent(
                     Home.this,
                     BuscarUsuarioActivity.class
             );
             startActivity(intent);
+        });
+
+        // catálogo cursos
+        btnCursos.setOnClickListener(v -> {
+
+            Intent intent = new Intent(Home.this, CursosActivity.class);
+            startActivity(intent);
+
         });
 
         // Cerrar sesión

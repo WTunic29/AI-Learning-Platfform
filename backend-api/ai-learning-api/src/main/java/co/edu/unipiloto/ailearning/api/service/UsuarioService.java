@@ -49,14 +49,9 @@ public class UsuarioService {
 
     String busqueda = termino.trim();
 
-    return usuarioRepository
-            .findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(
-                    busqueda,
-                    busqueda
-            )
-            .stream()
-            .map(UsuarioResponse::new)
-            .toList();
-}
+    return usuarioRepository.findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(
+                    busqueda, busqueda).stream().map(UsuarioResponse::new).toList();
+
+    }
 
 }

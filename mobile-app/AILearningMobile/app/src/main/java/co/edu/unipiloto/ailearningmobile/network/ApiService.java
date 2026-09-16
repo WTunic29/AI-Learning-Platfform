@@ -29,5 +29,8 @@ public interface ApiService {
             @Query("termino") String termino
     );
 
+    @GET("api/cursos")
+    Call<List<CursoResponse>> obtenerCursos();
+
 }
 
