@@ -26,6 +26,7 @@ public class Home extends AppCompatActivity {
 
         // Obtener el nombre enviado desde MainActivity
         String nombre = getIntent().getStringExtra("nombre");
+        Long usuarioId = getIntent().getLongExtra("usuarioId", -1L);
 
         if (nombre != null && !nombre.isEmpty()) {
 
@@ -46,6 +47,8 @@ public class Home extends AppCompatActivity {
         btnCursos.setOnClickListener(v -> {
 
             Intent intent = new Intent(Home.this, CursosActivity.class);
+            intent.putExtra("usuarioId", usuarioId);
+
             startActivity(intent);
 
         });

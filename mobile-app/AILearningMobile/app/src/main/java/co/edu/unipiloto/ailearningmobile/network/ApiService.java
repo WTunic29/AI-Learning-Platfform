@@ -37,6 +37,17 @@ public interface ApiService {
             @Query("termino") String termino
     );
 
+    @POST("api/inscripciones/{usuarioId}/{cursoId}")
+    Call<InscripcionResponse> inscribirCurso(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/inscripciones/usuario/{usuarioId}")
+    Call<List<InscripcionResponse>> obtenerInscripciones(
+            @Path("usuarioId") Long usuarioId
+    );
+
 }
 
 

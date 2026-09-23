@@ -40,6 +40,8 @@ public class CursosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cursos);
 
+        Long usuarioId = getIntent().getLongExtra("usuarioId", -1l);
+
         recyclerCursos = findViewById(R.id.recyclerCursos);
         progressCursos = findViewById(R.id.progressCursos);
         tvMensajeCursos = findViewById(R.id.tvMensajeCursos);
@@ -50,7 +52,7 @@ public class CursosActivity extends AppCompatActivity {
 
         recyclerCursos.setLayoutManager(new LinearLayoutManager(this));
 
-        cursoAdapter = new CursoAdapter(listaCursos);
+        cursoAdapter = new CursoAdapter(listaCursos, curso -> inscribirCurso(usuarioId, curso));
         recyclerCursos.setAdapter(cursoAdapter);
 
         btnBuscarCurso.setOnClickListener(v -> buscarCursos());
@@ -63,10 +65,65 @@ public class CursosActivity extends AppCompatActivity {
         cargarCursos();
     }
 
+    private void inscribirCurso(Long usuarioId, CursoResponse curso) {
+
+        if (usuarioId == null || usuarioId == -1L) {
+
+            Toast.makeText(
+                    this, "No se pudo identificar al usuario.", Toast.LENGTH_LONG).show();
+
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getApiService();
+
+        apiService.inscribirCurso(usuarioId, curso.getId())
+                .enqueue(new Callback<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse>() {
+
+            @Override
+            public void onResponse(
+
+                    Call<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse> call,
+                    Response<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    Toast.makeText(CursosActivity.this,
+                            "Te has inscrito en: " + response.body().getNombreCurso(), Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    if (response.code() == 500) {
+
+                        Toast.makeText(CursosActivity.this,
+                                "Ya estás inscrito en este curso.", Toast.LENGTH_LONG).show();
+
+                    } else {
+
+                        Toast.makeText(CursosActivity.this,
+                                "No se pudo realizar la inscripción. Código: " + response.code(), Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse> call, Throwable t) {
+
+                Toast.makeText(CursosActivity.this,
+                        "Error de conexión con el servidor.", Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+
+    }
+
     private void cargarCursos() {
 
         mostrarCargando();
-
         ApiService apiService = RetrofitClient.getApiService();
 
         apiService.obtenerCursos().enqueue(new Callback<List<CursoResponse>>() {

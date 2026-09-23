@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,9 +24,14 @@ import co.edu.unipiloto.ailearningmobile.dto.CursoResponse;
 public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHolder> {
 
     private final List<CursoResponse> listaCursos;
+    private final OnInscripcionClickListener listener;
+    public interface OnInscripcionClickListener { void onInscripcionClick(CursoResponse curso);}
 
-    public CursoAdapter(List<CursoResponse> listaCursos) {
+    public CursoAdapter(List<CursoResponse> listaCursos, OnInscripcionClickListener listener) {
+
         this.listaCursos = listaCursos;
+        this.listener = listener;
+
     }
 
     @NonNull
@@ -36,7 +42,6 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
                 .inflate(R.layout.item_curso, parent, false);
 
         return new CursoViewHolder(vista);
-
     }
 
     @Override
@@ -47,6 +52,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
         holder.tvNombreCurso.setText(curso.getNombre());
         holder.tvCategoriaCurso.setText(curso.getCategoria());
         holder.tvDescripcionCurso.setText(curso.getDescripcion());
+        holder.btnInscribirse.setOnClickListener(v -> listener.onInscripcionClick(curso));
 
     }
 
@@ -60,15 +66,23 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoViewHol
         TextView tvNombreCurso;
         TextView tvCategoriaCurso;
         TextView tvDescripcionCurso;
+        Button btnInscribirse;
 
         public CursoViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
-            tvNombreCurso = itemView.findViewById(R.id.tvNombreCurso);
-            tvCategoriaCurso = itemView.findViewById(R.id.tvCategoriaCurso);
-            tvDescripcionCurso = itemView.findViewById(R.id.tvDescripcionCurso);
+            tvNombreCurso =
+                    itemView.findViewById(R.id.tvNombreCurso);
 
+            tvCategoriaCurso =
+                    itemView.findViewById(R.id.tvCategoriaCurso);
+
+            tvDescripcionCurso =
+                    itemView.findViewById(R.id.tvDescripcionCurso);
+
+            btnInscribirse =
+                    itemView.findViewById(R.id.btnInscribirse);
         }
 
     }

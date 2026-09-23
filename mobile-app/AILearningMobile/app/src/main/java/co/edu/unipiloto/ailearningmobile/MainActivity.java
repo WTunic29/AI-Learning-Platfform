@@ -133,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
                                loginResponse.getNombre()
                         );
 
+                       intent.putExtra(
+                                "usuarioId",
+                                loginResponse.getId()
+                        );
+
                        startActivity(intent);
                        finish();
 
