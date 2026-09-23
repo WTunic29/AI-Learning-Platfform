@@ -43,7 +43,7 @@
             android:id="@+id/tvCategoriaCurso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Categoría"
+            android:text="CategorÃ­a"
 
             android:textColor="#2563EB"
             android:textSize="14sp"
@@ -57,7 +57,7 @@
             android:id="@+id/tvDescripcionCurso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descripción del curso"
+            android:text="DescripciÃ³n del curso"
 
             android:textColor="#4B5563"
             android:textSize="15sp"
@@ -75,6 +75,14 @@
             android:textAllCaps="false"
 
             />
+        <Button
+            android:id="@+id/btnVerContenido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver contenido"
+            android:textAllCaps="false"
+            android:layout_marginTop="8dp" />
+
 
     </LinearLayout>
 

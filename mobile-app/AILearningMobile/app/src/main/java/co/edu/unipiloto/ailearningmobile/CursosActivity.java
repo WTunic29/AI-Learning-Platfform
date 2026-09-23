@@ -52,7 +52,11 @@ public class CursosActivity extends AppCompatActivity {
 
         recyclerCursos.setLayoutManager(new LinearLayoutManager(this));
 
-        cursoAdapter = new CursoAdapter(listaCursos, curso -> inscribirCurso(usuarioId, curso));
+        cursoAdapter = new CursoAdapter(
+                listaCursos,
+                curso -> inscribirCurso(usuarioId, curso),
+                curso -> abrirContenido(usuarioId, curso)
+        );
         recyclerCursos.setAdapter(cursoAdapter);
 
         btnBuscarCurso.setOnClickListener(v -> buscarCursos());
@@ -64,6 +68,32 @@ public class CursosActivity extends AppCompatActivity {
 
         cargarCursos();
     }
+    private void abrirContenido(Long usuarioId, CursoResponse curso) {
+
+        if (usuarioId == null || usuarioId == -1L) {
+
+            Toast.makeText(
+                    this,
+                    "No se pudo identificar al usuario.",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
+        android.content.Intent intent =
+                new android.content.Intent(
+                        CursosActivity.this,
+                        ContenidoCursoActivity.class
+                );
+
+        intent.putExtra("usuarioId", usuarioId);
+        intent.putExtra("cursoId", curso.getId());
+        intent.putExtra("nombreCurso", curso.getNombre());
+
+        startActivity(intent);
+    }
+
 
     private void inscribirCurso(Long usuarioId, CursoResponse curso) {
 
@@ -96,12 +126,12 @@ public class CursosActivity extends AppCompatActivity {
                     if (response.code() == 500) {
 
                         Toast.makeText(CursosActivity.this,
-                                "Ya estás inscrito en este curso.", Toast.LENGTH_LONG).show();
+                                "Ya estÃ¡s inscrito en este curso.", Toast.LENGTH_LONG).show();
 
                     } else {
 
                         Toast.makeText(CursosActivity.this,
-                                "No se pudo realizar la inscripción. Código: " + response.code(), Toast.LENGTH_LONG).show();
+                                "No se pudo realizar la inscripciÃ³n. CÃ³digo: " + response.code(), Toast.LENGTH_LONG).show();
 
                     }
 
@@ -113,7 +143,7 @@ public class CursosActivity extends AppCompatActivity {
             public void onFailure(Call<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse> call, Throwable t) {
 
                 Toast.makeText(CursosActivity.this,
-                        "Error de conexión con el servidor.", Toast.LENGTH_LONG).show();
+                        "Error de conexiÃ³n con el servidor.", Toast.LENGTH_LONG).show();
 
             }
 
@@ -141,7 +171,7 @@ public class CursosActivity extends AppCompatActivity {
                     Call<List<CursoResponse>> call,
                     Throwable t) {
 
-                mostrarError("Error de conexión con el servidor.");
+                mostrarError("Error de conexiÃ³n con el servidor.");
             }
         });
     }
@@ -177,7 +207,7 @@ public class CursosActivity extends AppCompatActivity {
                     Call<List<CursoResponse>> call,
                     Throwable t) {
 
-                mostrarError("Error de conexión con el servidor.");
+                mostrarError("Error de conexiÃ³n con el servidor.");
             }
         });
     }
@@ -204,7 +234,7 @@ public class CursosActivity extends AppCompatActivity {
         } else {
 
             mostrarError(
-                    "No se pudieron cargar los cursos. Código: " +
+                    "No se pudieron cargar los cursos. CÃ³digo: " +
                     response.code()
             );
         }
