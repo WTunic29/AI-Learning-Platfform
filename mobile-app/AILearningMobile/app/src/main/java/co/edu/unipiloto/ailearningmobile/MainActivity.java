@@ -138,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
                                 loginResponse.getId()
                         );
 
+                        intent.putExtra(
+                                "rol",
+                                loginResponse.getRol()
+                        );
+
                        startActivity(intent);
                        finish();
 

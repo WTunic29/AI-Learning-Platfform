@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,24 @@ public class Home extends AppCompatActivity {
         // Obtener el nombre enviado desde MainActivity
         String nombre = getIntent().getStringExtra("nombre");
         Long usuarioId = getIntent().getLongExtra("usuarioId", -1L);
+        String rol = getIntent().getStringExtra("rol");
+
+        android.util.Log.d("HOME", "Rol recibido: " + rol);
+
+        Button btnGestionarActividades =
+                findViewById(R.id.btnGestionarActividades);
+
+        if ("DOCENTE".equalsIgnoreCase(rol)) {
+            btnGestionarActividades.setVisibility(View.VISIBLE);
+        }
+
+        btnGestionarActividades.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, CrearActividadActivity.class);
+
+            intent.putExtra("usuarioId", usuarioId);
+            startActivity(intent);
+
+        });
 
         if (nombre != null && !nombre.isEmpty()) {
 

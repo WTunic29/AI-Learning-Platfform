@@ -54,4 +54,8 @@ public interface ApiService {
             @Path("cursoId") Long cursoId
     );
 
+    @POST("api/actividades/curso/{cursoId}")
+    Call<ActividadResponse> crearActividad(@Path("cursoId") Long cursoId,
+            @Query("actorId") Long actorId, @Body CrearActividadRequest request);
+
 }

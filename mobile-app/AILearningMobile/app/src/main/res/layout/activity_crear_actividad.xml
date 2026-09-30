@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F7FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvTituloActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear actividad"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvSubtituloActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registra una actividad o evaluación para un curso"
+            android:textSize="16sp"
+            android:textColor="#6B7280"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Curso"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerCursos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editDescripcionActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: Evaluación de conceptos básicos de IA"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:padding="12dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editFechaActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="AAAA-MM-DD"
+            android:inputType="date"
+            android:singleLine="true"
+            android:padding="12dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ponderación"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editPonderacionActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: 20.00"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnCrearActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear actividad" />
+
+    </LinearLayout>
+
+</ScrollView>

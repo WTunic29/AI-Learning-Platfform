@@ -58,6 +58,17 @@
 
     <Button
 
+        android:id="@+id/btnGestionarActividades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestionar actividades"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+
+        />
+
+    <Button
+
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
