@@ -17,26 +17,22 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService){
+    public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
     @PutMapping("{id}/rol")
-    public ResponseEntity<Usuario> cambiarRol(
-            @PathVariable Long id,
-            @Valid @RequestBody CambiaRolRequest request) {
+    public ResponseEntity<Usuario> cambiarRol(@PathVariable Long id, @Valid @RequestBody CambiaRolRequest request, @RequestParam Long actorId) {
 
-        Usuario usuario = usuarioService.cambiarRol(id, request.getRol());
-
+        Usuario usuario = usuarioService.cambiarRol(id, request.getRol(), actorId);
         return ResponseEntity.ok(usuario);
     }
 
     @GetMapping("/buscar")
-public ResponseEntity<List<UsuarioResponse>> buscarUsuarios(
-        @RequestParam String termino) {
+    public ResponseEntity<List<UsuarioResponse>> buscarUsuarios(@RequestParam String termino) {
 
-    List<UsuarioResponse> usuarios = usuarioService.buscarUsuarios(termino);
+        List<UsuarioResponse> usuarios = usuarioService.buscarUsuarios(termino);
+        return ResponseEntity.ok(usuarios);
+    }
 
-    return ResponseEntity.ok(usuarios);
-}
 }

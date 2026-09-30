@@ -4,6 +4,7 @@ import co.edu.unipiloto.ailearning.api.dto.LoginRequest;
 import co.edu.unipiloto.ailearning.api.dto.RegisterRequest;
 import co.edu.unipiloto.ailearning.api.model.Usuario;
 import co.edu.unipiloto.ailearning.api.repository.UsuarioRepository;
+import co.edu.unipiloto.ailearning.api.model.Rol;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword());
 
         usuario.setPasswordHash(passwordHash);
-        usuario.setRol("ESTUDIANTE");
+        usuario.setRol(Rol.ESTUDIANTE);
 
         return usuarioRepository.save(usuario);
     }

@@ -27,8 +27,9 @@ public class Usuario {
     private String passwordHash;
 
     // en un principio tendremos Estudiante, docente, admin. Pero, aun no necesitamos implementar el sistema de roles completo
-    @Column(nullable = false, length = 30)
-    private String rol;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Rol rol;
 
     @Column(name = "fecha_registro", nullable = false)
     private LocalDateTime fechaRegistro;
@@ -73,11 +74,9 @@ public class Usuario {
         this.passwordHash = passwordHash;
     }
 
-    public String getRol() {
-        return rol;
-    }
+    public Rol getRol() {return rol;}
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 

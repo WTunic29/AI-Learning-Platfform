@@ -52,7 +52,7 @@ public class AuthController {
                     usuario.getId(),
                     usuario.getNombre(),
                     usuario.getCorreo(),
-                    usuario.getRol()
+                    usuario.getRol().name()
             );
 
             return ResponseEntity.ok(response);
