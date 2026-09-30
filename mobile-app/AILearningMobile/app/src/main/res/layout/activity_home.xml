@@ -1,80 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp"
+    android:layout_height="match_parent">
 
-    >
-
-    <TextView
-
-        android:id="@+id/textBienvenida"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bienvenido a Nexalearn"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="16dp"
-
-        />
-
-    <TextView
-
-        android:id="@+id/textUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Usuario"
-        android:textSize="18sp"
-        android:layout_marginBottom="32dp"
-
-        />
-
-    <Button
-
-        android:id="@+id/btnBuscarUsuario"
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Buscar usuario"
-        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="32dp">
 
-        />
+        <TextView
+            android:id="@+id/textBienvenida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido a Nexalearn"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="16dp" />
 
-    <Button
+        <TextView
+            android:id="@+id/textUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuario"
+            android:textSize="18sp"
+            android:layout_marginBottom="32dp" />
 
-        android:id="@+id/btnCursos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Catálogo de cursos"
-        android:layout_marginBottom="16dp"
+        <Button
+            android:id="@+id/btnBuscarUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Buscar usuario"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
 
-        />
+        <Button
+            android:id="@+id/btnCursos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cat&#225;logo de cursos"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
 
-    <Button
+        <Button
+            android:id="@+id/btnGestionarActividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gestionar actividades"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
 
-        android:id="@+id/btnGestionarActividades"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gestionar actividades"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
+        <Button
+            android:id="@+id/btnCalificarActividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calificar actividades"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
 
-        />
+        <Button
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cerrar sesi&#243;n"
+            android:textAllCaps="false" />
 
-    <Button
+    </LinearLayout>
 
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cerrar sesión"
-
-
-        />
-
-</LinearLayout>
+</ScrollView>

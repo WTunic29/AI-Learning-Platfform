@@ -12,7 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import java.util.List;
 
-//retrofit implementa las operaciones  para inicio de sesiÃƒÂ³n
+//retrofit implementa las operaciones  para inicio de sesiÃƒÆ’Ã‚Â³n
 public interface ApiService {
 
     @POST("api/auth/login") //cuando alguien ejecuta el login, hace una peticion hacia la ruta
@@ -57,5 +57,28 @@ public interface ApiService {
     @POST("api/actividades/curso/{cursoId}")
     Call<ActividadResponse> crearActividad(@Path("cursoId") Long cursoId,
             @Query("actorId") Long actorId, @Body CrearActividadRequest request);
+
+    @GET("api/actividades/curso/{cursoId}")
+    Call<List<ActividadResponse>> obtenerActividadesCurso(
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/calificaciones/curso/{cursoId}/estudiantes")
+    Call<List<EstudianteCursoResponse>> obtenerEstudiantesCurso(
+            @Path("cursoId") Long cursoId,
+            @Query("actorId") Long actorId
+    );
+
+    @POST("api/calificaciones/actividad/{actividadId}")
+    Call<CalificacionResponse> registrarCalificacion(
+            @Path("actividadId") Long actividadId,
+            @Query("actorId") Long actorId,
+            @Body RegistrarCalificacionRequest request
+    );
+
+    @GET("api/calificaciones/actividad/{actividadId}")
+    Call<List<CalificacionResponse>> obtenerCalificacionesActividad(
+            @Path("actividadId") Long actividadId
+    );
 
 }
