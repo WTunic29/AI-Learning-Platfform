@@ -36,11 +36,11 @@ public class Home extends AppCompatActivity {
 
         // Buscar usuarios
         btnBuscarUsuario.setOnClickListener(v -> {
-            Intent intent = new Intent(
-                    Home.this,
-                    BuscarUsuarioActivity.class
-            );
+            Intent intent = new Intent(Home.this, BuscarUsuarioActivity.class);
+
+            intent.putExtra("usuarioId", usuarioId);
             startActivity(intent);
+
         });
 
         // catálogo cursos

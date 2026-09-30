@@ -25,11 +25,22 @@ public class BuscarUsuarioActivity extends AppCompatActivity {
 
     private EditText editBuscar;
     private LinearLayout contenedorResultados;
+    private Long actorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_usuario);
+
+        actorId = getIntent().getLongExtra("usuarioId", -1L);
+
+        if (actorId == -1L) {
+            Toast.makeText(this, "No se pudo identificar al usuario actual",
+                    Toast.LENGTH_LONG).show();
+
+            finish();
+            return;
+        }
 
         editBuscar = findViewById(R.id.editBuscar);
         Button btnBuscar = findViewById(R.id.btnBuscar);
@@ -137,31 +148,25 @@ public class BuscarUsuarioActivity extends AppCompatActivity {
 
         CambiarRolRequest request = new CambiarRolRequest(rol);
 
-        apiService.cambiarRol(id, request).enqueue(new Callback<ResponseBody>() {
+        apiService.cambiarRol(id, actorId, request).enqueue(new Callback<ResponseBody>() {
 
             @Override
-            public void onResponse(
-                    Call<ResponseBody> call,
-                    Response<ResponseBody> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 if (response.isSuccessful()) {
 
-                    Toast.makeText(
-                            BuscarUsuarioActivity.this,
-                            "Rol cambiado a " + rol,
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    Toast.makeText(BuscarUsuarioActivity.this, "Rol cambiado a " + rol,
+                            Toast.LENGTH_SHORT).show();
 
                     buscarUsuarios();
 
                 } else {
 
-                    Toast.makeText(
-                            BuscarUsuarioActivity.this,
-                            "Error al cambiar rol: " + response.code(),
-                            Toast.LENGTH_SHORT
-                    ).show();
+                    Toast.makeText(BuscarUsuarioActivity.this, "Error al cambiar rol: " + response.code(),
+                            Toast.LENGTH_SHORT).show();
+
                 }
+
             }
 
             @Override

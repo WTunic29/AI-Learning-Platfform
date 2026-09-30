@@ -22,7 +22,7 @@ public interface ApiService {
     Call<ResponseBody> register(@Body RegisterRequest request);
 
     @PUT("api/usuarios/{id}/rol")
-    Call<ResponseBody> cambiarRol(@Path("id") Long id, @Body CambiarRolRequest request);
+    Call<ResponseBody> cambiarRol(@Path("id") Long id, @Query("actorId") Long actorId, @Body CambiarRolRequest request);
 
     @GET("api/usuarios/buscar")
     Call<List<UsuarioResponse>> buscarUsuarios(
