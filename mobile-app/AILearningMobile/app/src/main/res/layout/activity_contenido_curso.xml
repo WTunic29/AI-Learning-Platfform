@@ -16,6 +16,15 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
 
+    <TextView
+        android:id="@+id/tvProgresoCurso"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Avance del curso: 0%"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
     <ProgressBar
         android:id="@+id/progressContenido"
         android:layout_width="wrap_content"

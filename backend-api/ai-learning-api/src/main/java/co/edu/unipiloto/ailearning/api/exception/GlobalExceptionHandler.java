@@ -19,4 +19,13 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> manejarArgumentoInvalido(IllegalArgumentException ex){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "error", "Recurso no encontrado",
+                "Mensaje", ex.getMessage()));
+
+    }
+
 }

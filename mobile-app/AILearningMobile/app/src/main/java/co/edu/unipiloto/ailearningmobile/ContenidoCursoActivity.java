@@ -29,6 +29,11 @@ public class ContenidoCursoActivity extends AppCompatActivity {
     private ProgressBar progressContenido;
     private TextView tvMensajeContenido;
     private TextView tvTituloContenido;
+    private TextView tvProgresoCurso;
+    private co.edu.unipiloto.ailearningmobile.dto.ProgresoCursoResponse progresoActual;
+    private long usuarioId;
+    private long cursoId;
+    private List<ModuloResponse> modulosActuales;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +45,10 @@ public class ContenidoCursoActivity extends AppCompatActivity {
         progressContenido = findViewById(R.id.progressContenido);
         tvMensajeContenido = findViewById(R.id.tvMensajeContenido);
         tvTituloContenido = findViewById(R.id.tvTituloContenido);
+        tvProgresoCurso = findViewById(R.id.tvProgresoCurso);
 
-        long usuarioId = getIntent().getLongExtra("usuarioId", -1L);
-        long cursoId = getIntent().getLongExtra("cursoId", -1L);
+        usuarioId = getIntent().getLongExtra("usuarioId", -1L);
+        cursoId = getIntent().getLongExtra("cursoId", -1L);
         String nombreCurso = getIntent().getStringExtra("nombreCurso");
 
         if (nombreCurso != null && !nombreCurso.trim().isEmpty()) {
@@ -69,9 +75,7 @@ public class ContenidoCursoActivity extends AppCompatActivity {
                 .enqueue(new Callback<List<ModuloResponse>>() {
 
                     @Override
-                    public void onResponse(
-                            Call<List<ModuloResponse>> call,
-                            Response<List<ModuloResponse>> response) {
+                    public void onResponse(Call<List<ModuloResponse>> call, Response<List<ModuloResponse>> response) {
 
                         progressContenido.setVisibility(View.GONE);
 
@@ -82,13 +86,14 @@ public class ContenidoCursoActivity extends AppCompatActivity {
                                 return;
                             }
 
+                            modulosActuales = response.body();
+
                             mostrarModulos(response.body());
+                            cargarProgresoCurso();
 
                         } else if (response.code() == 403) {
 
-                            mostrarError(
-                                    "Debes estar inscrito en este curso para acceder al contenido."
-                            );
+                            mostrarError("Debes estar inscrito en este curso para acceder al contenido.");
 
                         } else if (response.code() == 404) {
 
@@ -96,23 +101,78 @@ public class ContenidoCursoActivity extends AppCompatActivity {
 
                         } else {
 
-                            mostrarError(
-                                    "No se pudo cargar el contenido. Código: " +
-                                            response.code()
-                            );
+                            mostrarError("No se pudo cargar el contenido. Código: " + response.code());
+
                         }
+
                     }
 
                     @Override
-                    public void onFailure(
-                            Call<List<ModuloResponse>> call,
-                            Throwable t) {
-
-                        mostrarError(
-                                "Error de conexión con el servidor."
-                        );
+                    public void onFailure(Call<List<ModuloResponse>> call, Throwable t) {
+                        mostrarError("Error de conexión con el servidor.");
                     }
+
                 });
+
+    }
+
+    private void cargarProgresoCurso() {
+
+        ApiService apiService = RetrofitClient.getApiService();
+
+        apiService.obtenerProgresoCurso(usuarioId, cursoId).enqueue(new Callback<co.edu.unipiloto.ailearningmobile.dto.ProgresoCursoResponse>() {
+
+                    @Override
+                    public void onResponse(Call<co.edu.unipiloto.ailearningmobile.dto.ProgresoCursoResponse> call,
+                                           Response<co.edu.unipiloto.ailearningmobile.dto.ProgresoCursoResponse> response) {
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            // Guardar el progreso más reciente.
+                            progresoActual = response.body();
+                            // Actualizar el porcentaje.
+                            double porcentaje = progresoActual.getPorcentajeAvance();
+
+                            tvProgresoCurso.setText(String.format(java.util.Locale.getDefault(),
+                                            "Avance del curso: %.2f%%", porcentaje));
+
+                            // Actualizar los estados de los módulos.
+                            if (modulosActuales != null) {
+                                mostrarModulos(modulosActuales);
+                            }
+
+                        } else {
+
+                            tvProgresoCurso.setText("No se pudo consultar el progreso.");
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<co.edu.unipiloto.ailearningmobile.dto.ProgresoCursoResponse> call, Throwable t) {
+
+                        tvProgresoCurso.setText("Error al consultar el progreso.");
+
+                    }
+
+                });
+    }
+
+    private boolean estaCompletado(Long moduloId) {
+
+        if (progresoActual == null || progresoActual.getModulos() == null) {
+            return false;
+        }
+
+        for (co.edu.unipiloto.ailearningmobile.dto.ModuloProgresoResponse modulo : progresoActual.getModulos()) {
+
+            if (moduloId.equals(modulo.getModuloId())) {
+                return modulo.isCompletado();
+            }
+
+        }
+
+        return false;
     }
 
     private void mostrarModulos(List<ModuloResponse> modulos) {
@@ -121,85 +181,134 @@ public class ContenidoCursoActivity extends AppCompatActivity {
 
         for (ModuloResponse modulo : modulos) {
 
+            // Título del módulo
             TextView tituloModulo = new TextView(this);
-            tituloModulo.setText(
-                    "Módulo " + modulo.getOrden() + ": " +
-                            modulo.getTitulo()
-            );
+
+            tituloModulo.setText("Módulo " + modulo.getOrden() + ": " + modulo.getTitulo());
             tituloModulo.setTextSize(20);
             tituloModulo.setPadding(0, 24, 0, 8);
 
             contenedorModulos.addView(tituloModulo);
 
+            // Descripción del módulo
             TextView descripcionModulo = new TextView(this);
+
             descripcionModulo.setText(modulo.getDescripcion());
             descripcionModulo.setTextSize(15);
             descripcionModulo.setPadding(0, 0, 0, 12);
 
             contenedorModulos.addView(descripcionModulo);
 
+            // Consultar el estado real del módulo
+            boolean completado = estaCompletado(modulo.getId());
+
+            TextView tvEstadoModulo = new TextView(this);
+
+            tvEstadoModulo.setText(completado ? "Estado: Completado" : "Estado: Pendiente");
+            tvEstadoModulo.setTextSize(15);
+            tvEstadoModulo.setPadding(0, 0, 0, 8);
+
+            contenedorModulos.addView(tvEstadoModulo);
+
+            // Mostrar el botón solamente si está pendiente
+            if (!completado) {
+
+                Button botonCompletar = new Button(this);
+                botonCompletar.setText("Marcar como completado");
+                botonCompletar.setAllCaps(false);
+
+                botonCompletar.setOnClickListener(v -> marcarModuloCompletado(modulo.getId()));
+                contenedorModulos.addView(botonCompletar);
+
+            }
+
+            // Recursos del módulo
             List<RecursoResponse> recursos = modulo.getRecursos();
 
             if (recursos == null || recursos.isEmpty()) {
 
                 TextView sinRecursos = new TextView(this);
+
                 sinRecursos.setText("Sin recursos disponibles.");
                 sinRecursos.setPadding(16, 4, 0, 12);
 
                 contenedorModulos.addView(sinRecursos);
-                continue;
+
+            } else {
+
+                for (RecursoResponse recurso : recursos) {
+
+                    Button botonRecurso = new Button(this);
+
+                    botonRecurso.setText(recurso.getTipo() + " · " + recurso.getTitulo());
+                    botonRecurso.setAllCaps(false);
+                    botonRecurso.setOnClickListener(v -> abrirRecurso(recurso.getUrl()));
+
+                    contenedorModulos.addView(botonRecurso);
+
+                }
+
             }
 
-            for (RecursoResponse recurso : recursos) {
-
-                Button botonRecurso = new Button(this);
-
-                botonRecurso.setText(
-                        recurso.getTipo() + " · " +
-                                recurso.getTitulo()
-                );
-
-                botonRecurso.setAllCaps(false);
-
-                botonRecurso.setOnClickListener(v ->
-                        abrirRecurso(recurso.getUrl())
-                );
-
-                contenedorModulos.addView(botonRecurso);
-            }
         }
+
+    }
+
+    private void marcarModuloCompletado(Long moduloId) {
+
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.marcarModuloCompletado(usuarioId, moduloId).enqueue(new Callback<Void>() {
+
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+
+                        if (response.isSuccessful()) {
+
+                            Toast.makeText(ContenidoCursoActivity.this, "Módulo completado correctamente.",
+                                    Toast.LENGTH_SHORT).show();
+
+                            cargarProgresoCurso();
+
+                        } else {
+
+                            Toast.makeText(ContenidoCursoActivity.this, "No se pudo completar el módulo. Código: " + response.code(),
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                        Toast.makeText(ContenidoCursoActivity.this,
+                                "Error de conexión al guardar el progreso.", Toast.LENGTH_LONG).show();
+
+                    }
+
+                });
+
     }
 
     private void abrirRecurso(String url) {
 
         if (url == null || url.trim().isEmpty()) {
 
-            Toast.makeText(
-                    this,
-                    "El recurso no tiene una URL disponible.",
-                    Toast.LENGTH_LONG
-            ).show();
-
+            Toast.makeText(this, "El recurso no tiene una URL disponible.", Toast.LENGTH_LONG).show();
             return;
+
         }
 
         try {
 
-            Intent intent = new Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(url)
-            );
-
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
 
         } catch (Exception e) {
 
-            Toast.makeText(
-                    this,
-                    "No fue posible abrir el recurso.",
-                    Toast.LENGTH_LONG
-            ).show();
+            Toast.makeText(this, "No fue posible abrir el recurso.", Toast.LENGTH_LONG).show();
         }
+
     }
 
     private void mostrarError(String mensaje) {
@@ -208,10 +317,8 @@ public class ContenidoCursoActivity extends AppCompatActivity {
         tvMensajeContenido.setText(mensaje);
         tvMensajeContenido.setVisibility(View.VISIBLE);
 
-        Toast.makeText(
-                this,
-                mensaje,
-                Toast.LENGTH_LONG
-        ).show();
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
+
     }
+
 }
