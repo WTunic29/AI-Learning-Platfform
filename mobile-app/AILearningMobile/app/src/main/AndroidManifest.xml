@@ -49,6 +49,10 @@
             android:name=".CalificarActividadActivity"
             android:exported="false" />
 
+            <activity
+            android:name=".CertificadoActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -84,4 +84,16 @@ public interface ApiService {
     @GET("api/progreso/usuario/{usuarioId}/curso/{cursoId}")
     Call<ProgresoCursoResponse> obtenerProgresoCurso(@Path("usuarioId") Long usuarioId, @Path("cursoId") Long cursoId);
 
+    @POST("api/certificados/usuario/{usuarioId}/curso/{cursoId}")
+    Call<CertificadoResponse> generarCertificado(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/certificados/{certificadoId}/pdf")
+    Call<okhttp3.ResponseBody> descargarCertificado(
+            @Path("certificadoId") Long certificadoId,
+            @Query("usuarioId") Long usuarioId
+    );
+
 }

@@ -22,22 +22,17 @@ public class Home extends AppCompatActivity {
         Button btnCursos = findViewById(R.id.btnCursos);
         Button btnGestionarActividades = findViewById(R.id.btnGestionarActividades);
         Button btnCalificarActividades = findViewById(R.id.btnCalificarActividades);
+        Button btnCertificados = findViewById(R.id.btnCertificados);
         Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
         String nombre = getIntent().getStringExtra("nombre");
         long usuarioId = getIntent().getLongExtra("usuarioId", -1L);
         String rol = getIntent().getStringExtra("rol");
 
-        android.util.Log.d("HOME", "Rol recibido: " + rol);
-        android.util.Log.d("HOME", "Usuario ID: " + usuarioId);
-
         if (nombre != null && !nombre.isEmpty()) {
             textUsuario.setText("Bienvenido, " + nombre);
         }
 
-        /*
-         * Funciones exclusivas del DOCENTE
-         */
         if ("DOCENTE".equalsIgnoreCase(rol)) {
 
             btnGestionarActividades.setVisibility(View.VISIBLE);
@@ -49,65 +44,75 @@ public class Home extends AppCompatActivity {
             btnCalificarActividades.setVisibility(View.GONE);
         }
 
+        if ("ESTUDIANTE".equalsIgnoreCase(rol)) {
+            btnCertificados.setVisibility(View.VISIBLE);
+        } else {
+            btnCertificados.setVisibility(View.GONE);
+        }
+
         btnGestionarActividades.setOnClickListener(v -> {
 
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            CrearActividadActivity.class
-                    );
+            Intent intent = new Intent(
+                    Home.this,
+                    CrearActividadActivity.class
+            );
 
             intent.putExtra("usuarioId", usuarioId);
-
             startActivity(intent);
         });
 
         btnCalificarActividades.setOnClickListener(v -> {
 
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            CalificarActividadActivity.class
-                    );
+            Intent intent = new Intent(
+                    Home.this,
+                    CalificarActividadActivity.class
+            );
 
             intent.putExtra("usuarioId", usuarioId);
-
             startActivity(intent);
         });
 
         btnBuscarUsuario.setOnClickListener(v -> {
 
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            BuscarUsuarioActivity.class
-                    );
+            Intent intent = new Intent(
+                    Home.this,
+                    BuscarUsuarioActivity.class
+            );
 
             intent.putExtra("usuarioId", usuarioId);
-
             startActivity(intent);
         });
 
         btnCursos.setOnClickListener(v -> {
 
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            CursosActivity.class
-                    );
+            Intent intent = new Intent(
+                    Home.this,
+                    CursosActivity.class
+            );
 
             intent.putExtra("usuarioId", usuarioId);
+            startActivity(intent);
+        });
+
+        btnCertificados.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    Home.this,
+                    CertificadoActivity.class
+            );
+
+            intent.putExtra("usuarioId", usuarioId);
+            intent.putExtra("cursoId", 1L);
 
             startActivity(intent);
         });
 
         btnCerrarSesion.setOnClickListener(v -> {
 
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            MainActivity.class
-                    );
+            Intent intent = new Intent(
+                    Home.this,
+                    MainActivity.class
+            );
 
             intent.setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK

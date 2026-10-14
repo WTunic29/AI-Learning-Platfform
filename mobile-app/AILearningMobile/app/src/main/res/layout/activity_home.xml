@@ -65,6 +65,15 @@
             android:textAllCaps="false"
             android:layout_marginBottom="16dp"
             android:visibility="gone" />
+        <Button
+            android:id="@+id/btnCertificados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mis certificados"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
 
         <Button
             android:id="@+id/btnCerrarSesion"
