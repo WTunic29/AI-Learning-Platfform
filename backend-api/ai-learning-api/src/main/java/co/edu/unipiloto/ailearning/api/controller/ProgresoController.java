@@ -1,5 +1,8 @@
 package co.edu.unipiloto.ailearning.api.controller;
 
+import java.util.List;
+
+import co.edu.unipiloto.ailearning.api.dto.CursoProgresoResumenResponse;
 import co.edu.unipiloto.ailearning.api.dto.ProgresoCursoResponse;
 import co.edu.unipiloto.ailearning.api.service.ProgresoService;
 
@@ -27,6 +30,15 @@ public class ProgresoController {
     @GetMapping("/usuario/{usuarioId}/curso/{cursoId}")
     public ResponseEntity<ProgresoCursoResponse> obtenerProgresoCurso(@PathVariable Long usuarioId, @PathVariable Long cursoId) {
         return ResponseEntity.ok(progresoService.obtenerProgresoCurso(usuarioId, cursoId));
+    }
+
+    @GetMapping("/usuario/{usuarioId}/cursos")
+    public ResponseEntity<List<CursoProgresoResumenResponse>> obtenerMisCursos(
+            @PathVariable Long usuarioId) {
+
+        return ResponseEntity.ok(
+                progresoService.obtenerMisCursos(usuarioId)
+        );
     }
 
 }

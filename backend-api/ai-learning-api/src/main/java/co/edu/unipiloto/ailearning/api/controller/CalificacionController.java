@@ -61,4 +61,18 @@ public class CalificacionController {
                 )
         );
     }
+    @GetMapping("/usuario/{usuarioId}/curso/{cursoId}")
+    public ResponseEntity<List<co.edu.unipiloto.ailearning.api.dto.MiCalificacionResponse>>
+    obtenerMisCalificaciones(
+            @PathVariable Long usuarioId,
+            @PathVariable Long cursoId) {
+
+        return ResponseEntity.ok(
+                calificacionService.obtenerMisCalificaciones(
+                        usuarioId,
+                        cursoId
+                )
+        );
+    }
+
 }

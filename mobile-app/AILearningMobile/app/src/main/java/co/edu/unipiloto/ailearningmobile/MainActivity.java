@@ -63,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
         EditText editPassword = findViewById(R.id.editPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
         TextView tvCrearCuenta = findViewById(R.id.tvCrearCuenta);
+        TextView tvOlvidePassword = findViewById(R.id.tvOlvidePassword);
+
+        
+        tvOlvidePassword.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    RecuperarPasswordActivity.class
+            );
+
+            startActivity(intent);
+        });
 
         tvCrearCuenta.setOnClickListener(v -> {
 

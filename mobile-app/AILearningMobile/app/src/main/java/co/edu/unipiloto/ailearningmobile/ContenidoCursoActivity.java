@@ -139,6 +139,7 @@ public class ContenidoCursoActivity extends AppCompatActivity {
                             // Actualizar los estados de los módulos.
                             if (modulosActuales != null) {
                                 mostrarModulos(modulosActuales);
+                                cargarMisCalificaciones();
                             }
 
                         } else {
@@ -319,6 +320,244 @@ public class ContenidoCursoActivity extends AppCompatActivity {
 
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
 
+    }
+
+    private void cargarMisCalificaciones() {
+
+        ApiService apiService =
+                RetrofitClient.getApiService();
+
+        apiService.obtenerMisCalificaciones(
+                usuarioId,
+                cursoId
+        ).enqueue(
+                new Callback<List<co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse>>() {
+
+            @Override
+            public void onResponse(
+                    Call<List<co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse>> call,
+                    Response<List<co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse>> response) {
+
+                if (!response.isSuccessful()
+                        || response.body() == null) {
+                    return;
+                }
+
+                List<co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse>
+                        calificaciones = response.body();
+
+                TextView titulo =
+                        new TextView(
+                                ContenidoCursoActivity.this
+                        );
+
+                titulo.setText("Mis calificaciones");
+                titulo.setTextSize(22);
+                titulo.setTypeface(
+                        null,
+                        android.graphics.Typeface.BOLD
+                );
+
+                titulo.setPadding(
+                        0,
+                        40,
+                        0,
+                        20
+                );
+
+                contenedorModulos.addView(titulo);
+
+                if (calificaciones.isEmpty()) {
+
+                    TextView sinNotas =
+                            new TextView(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    sinNotas.setText(
+                            "Aun no tienes actividades calificadas."
+                    );
+
+                    sinNotas.setTextSize(15);
+
+                    contenedorModulos.addView(sinNotas);
+
+                    return;
+                }
+
+                double sumaPonderada = 0.0;
+                double totalPeso = 0.0;
+
+                for (co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse calificacion
+                        : calificaciones) {
+
+                    LinearLayout tarjeta =
+                            new LinearLayout(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    tarjeta.setOrientation(
+                            LinearLayout.VERTICAL
+                    );
+
+                    tarjeta.setPadding(
+                            28,
+                            24,
+                            28,
+                            24
+                    );
+
+                    tarjeta.setBackgroundResource(
+                            R.drawable.bg_curso_progreso
+                    );
+
+                    LinearLayout.LayoutParams params =
+                            new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                            );
+
+                    params.setMargins(
+                            0,
+                            0,
+                            0,
+                            20
+                    );
+
+                    tarjeta.setLayoutParams(params);
+
+                    TextView actividad =
+                            new TextView(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    actividad.setText(
+                            calificacion.getActividad()
+                    );
+
+                    actividad.setTextSize(17);
+
+                    actividad.setTypeface(
+                            null,
+                            android.graphics.Typeface.BOLD
+                    );
+
+                    TextView nota =
+                            new TextView(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    nota.setText(
+                            "Nota: "
+                                    + calificacion.getNota()
+                                    + " / 5.0"
+                    );
+
+                    nota.setTextSize(16);
+
+                    nota.setPadding(
+                            0,
+                            10,
+                            0,
+                            6
+                    );
+
+                    TextView retro =
+                            new TextView(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    String comentario =
+                            calificacion.getRetroalimentacion();
+
+                    if (comentario == null
+                            || comentario.trim().isEmpty()) {
+
+                        comentario =
+                                "Sin retroalimentacion.";
+                    }
+
+                    retro.setText(
+                            "Retroalimentacion: "
+                                    + comentario
+                    );
+
+                    retro.setTextSize(14);
+
+                    tarjeta.addView(actividad);
+                    tarjeta.addView(nota);
+                    tarjeta.addView(retro);
+
+                    contenedorModulos.addView(tarjeta);
+
+                    double peso = 1.0;
+
+                    if (calificacion.getPonderacion() != null
+                            && calificacion
+                            .getPonderacion()
+                            .doubleValue() > 0) {
+
+                        peso =
+                                calificacion
+                                .getPonderacion()
+                                .doubleValue();
+                    }
+
+                    sumaPonderada +=
+                            calificacion
+                            .getNota()
+                            .doubleValue()
+                            * peso;
+
+                    totalPeso += peso;
+                }
+
+                if (totalPeso > 0) {
+
+                    double promedio =
+                            sumaPonderada
+                                    / totalPeso;
+
+                    TextView resumen =
+                            new TextView(
+                                    ContenidoCursoActivity.this
+                            );
+
+                    resumen.setText(
+                            String.format(
+                                    java.util.Locale.getDefault(),
+                                    "Promedio: %.2f / 5.0\nEstado: %s",
+                                    promedio,
+                                    promedio >= 3.0
+                                            ? "APROBADO"
+                                            : "NO APROBADO"
+                            )
+                    );
+
+                    resumen.setTextSize(18);
+
+                    resumen.setTypeface(
+                            null,
+                            android.graphics.Typeface.BOLD
+                    );
+
+                    resumen.setPadding(
+                            0,
+                            10,
+                            0,
+                            30
+                    );
+
+                    contenedorModulos.addView(resumen);
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<List<co.edu.unipiloto.ailearningmobile.dto.MiCalificacionResponse>> call,
+                    Throwable t) {
+            }
+        });
     }
 
 }

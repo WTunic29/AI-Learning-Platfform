@@ -1,5 +1,9 @@
 package co.edu.unipiloto.ailearning.api.service;
 
+import co.edu.unipiloto.ailearning.api.model.Curso;
+import co.edu.unipiloto.ailearning.api.model.Inscripcion;
+
+import co.edu.unipiloto.ailearning.api.dto.CursoProgresoResumenResponse;
 import co.edu.unipiloto.ailearning.api.dto.ModuloProgresoResponse;
 import co.edu.unipiloto.ailearning.api.dto.ProgresoCursoResponse;
 import co.edu.unipiloto.ailearning.api.exception.AccesoDenegadoException;
@@ -52,14 +56,14 @@ public class ProgresoService {
         }
 
         Modulo modulo = moduloRepository.findById(moduloId).orElseThrow(() ->
-                        new IllegalArgumentException("El módulo no existe"));
+                        new IllegalArgumentException("El mÃƒÂ³dulo no existe"));
 
         Long cursoId = modulo.getCurso().getId();
 
         boolean inscrito = inscripcionRepository.existsByUsuarioIdAndCursoId(usuarioId, cursoId);
 
         if (!inscrito) {
-            throw new AccesoDenegadoException("El estudiante no está inscrito en este curso");
+            throw new AccesoDenegadoException("El estudiante no estÃƒÂ¡ inscrito en este curso");
         }
 
         return progresoRepository.findByUsuarioIdAndModuloId(usuarioId, moduloId).orElseGet(() -> {
@@ -114,6 +118,53 @@ public class ProgresoService {
         double porcentaje = totalModulos == 0 ? 0.0 : Math.round((completados * 100.0 / totalModulos) * 100.0) / 100.0;
 
         return new ProgresoCursoResponse(curso.getId(), curso.getNombre(), totalModulos, completados, pendientes, porcentaje, detalleModulos);
+    }
+
+    public List<CursoProgresoResumenResponse> obtenerMisCursos(Long usuarioId) {
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "El usuario no existe"
+                        )
+                );
+
+        if (usuario.getRol() != Rol.ESTUDIANTE) {
+            throw new AccesoDenegadoException(
+                    "Solo los estudiantes pueden consultar sus cursos"
+            );
+        }
+
+        List<Inscripcion> inscripciones =
+                inscripcionRepository.findByUsuarioId(usuarioId);
+
+        return inscripciones.stream()
+                .map(inscripcion -> {
+
+                    Curso curso = inscripcion.getCurso();
+
+                    ProgresoCursoResponse progreso =
+                            obtenerProgresoCurso(
+                                    usuarioId,
+                                    curso.getId()
+                            );
+
+                    double porcentaje =
+                            progreso.getPorcentajeAvance();
+
+                    String estado =
+                            porcentaje >= 100.0
+                                    ? "FINALIZADO"
+                                    : "EN_PROGRESO";
+
+                    return new CursoProgresoResumenResponse(
+                            curso.getId(),
+                            curso.getNombre(),
+                            porcentaje,
+                            estado
+                    );
+                })
+                .toList();
     }
 
 }

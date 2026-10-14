@@ -16,4 +16,8 @@ public interface CalificacionRepository
     );
 
     List<Calificacion> findByActividadId(Long actividadId);
+    List<Calificacion> findByEstudianteIdAndActividadCursoIdOrderByActividadIdAsc(
+            Long estudianteId,
+            Long cursoId
+    );
 }

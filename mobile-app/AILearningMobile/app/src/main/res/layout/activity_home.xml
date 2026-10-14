@@ -17,7 +17,7 @@
             android:id="@+id/textBienvenida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bienvenido a Nexalearn"
+            android:text="Bienvenido a NexaLearn"
             android:textSize="26sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -38,15 +38,25 @@
             android:layout_height="wrap_content"
             android:text="Buscar usuario"
             android:textAllCaps="false"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnCursos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cat&#225;logo de cursos"
+            android:text="Catálogo de cursos"
             android:textAllCaps="false"
             android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnMisCursos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mis cursos"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnGestionarActividades"
@@ -65,6 +75,7 @@
             android:textAllCaps="false"
             android:layout_marginBottom="16dp"
             android:visibility="gone" />
+
         <Button
             android:id="@+id/btnCertificados"
             android:layout_width="match_parent"
@@ -74,12 +85,11 @@
             android:layout_marginBottom="16dp"
             android:visibility="gone" />
 
-
         <Button
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cerrar sesi&#243;n"
+            android:text="Cerrar sesión"
             android:textAllCaps="false" />
 
     </LinearLayout>

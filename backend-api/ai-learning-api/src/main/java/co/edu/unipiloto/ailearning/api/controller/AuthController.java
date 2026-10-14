@@ -1,8 +1,6 @@
 package co.edu.unipiloto.ailearning.api.controller;
 
-import co.edu.unipiloto.ailearning.api.dto.LoginRequest;
-import co.edu.unipiloto.ailearning.api.dto.LoginResponse;
-import co.edu.unipiloto.ailearning.api.dto.RegisterRequest;
+import co.edu.unipiloto.ailearning.api.dto.*;
 import co.edu.unipiloto.ailearning.api.model.Usuario;
 import co.edu.unipiloto.ailearning.api.service.AuthService;
 
@@ -18,20 +16,27 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(
+            AuthService authService) {
+
         this.authService = authService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registrar(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> registrar(
+            @Valid
+            @RequestBody
+            RegisterRequest request) {
 
         try {
 
-            Usuario usuario = authService.registrar(request);
+            authService.registrar(request);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body("El usuario ha sido registrado correctamente");
+                    .body(
+                            "El usuario ha sido registrado correctamente"
+                    );
 
         } catch (RuntimeException e) {
 
@@ -42,25 +47,84 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(
+            @Valid
+            @RequestBody
+            LoginRequest request) {
 
         try {
 
-            Usuario usuario = authService.login(request);
+            Usuario usuario =
+                    authService.login(
+                            request
+                    );
 
-            LoginResponse response = new LoginResponse(
-                    usuario.getId(),
-                    usuario.getNombre(),
-                    usuario.getCorreo(),
-                    usuario.getRol().name()
+            LoginResponse response =
+                    new LoginResponse(
+                            usuario.getId(),
+                            usuario.getNombre(),
+                            usuario.getCorreo(),
+                            usuario.getRol().name()
+                    );
+
+            return ResponseEntity.ok(
+                    response
             );
-
-            return ResponseEntity.ok(response);
 
         } catch (RuntimeException e) {
 
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
+                    .status(
+                            HttpStatus.UNAUTHORIZED
+                    )
+                    .body(
+                            e.getMessage()
+                    );
+        }
+    }
+
+    @PostMapping("/password/solicitar")
+    public ResponseEntity<?> solicitarRecuperacion(
+            @RequestBody
+            SolicitarRecuperacionRequest request) {
+
+        try {
+
+            return ResponseEntity.ok(
+                    authService
+                            .solicitarRecuperacion(
+                                    request.getCorreo()
+                            )
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/password/restablecer")
+    public ResponseEntity<?> restablecerPassword(
+            @RequestBody
+            RestablecerPasswordRequest request) {
+
+        try {
+
+            authService
+                    .restablecerPassword(
+                            request
+                    );
+
+            return ResponseEntity.ok(
+                    "Password actualizada correctamente"
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity
+                    .badRequest()
                     .body(e.getMessage());
         }
     }

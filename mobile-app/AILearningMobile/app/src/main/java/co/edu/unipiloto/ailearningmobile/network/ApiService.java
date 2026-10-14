@@ -1,5 +1,6 @@
 package co.edu.unipiloto.ailearningmobile.network;
 
+import co.edu.unipiloto.ailearningmobile.dto.CursoProgresoResumenResponse;
 import co.edu.unipiloto.ailearningmobile.dto.*;
 
 import retrofit2.Call;
@@ -94,6 +95,27 @@ public interface ApiService {
     Call<okhttp3.ResponseBody> descargarCertificado(
             @Path("certificadoId") Long certificadoId,
             @Query("usuarioId") Long usuarioId
+    );
+
+    @GET("api/progreso/usuario/{usuarioId}/cursos")
+    Call<List<CursoProgresoResumenResponse>> obtenerMisCursos(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @GET("api/calificaciones/usuario/{usuarioId}/curso/{cursoId}")
+    Call<List<MiCalificacionResponse>> obtenerMisCalificaciones(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @POST("api/auth/password/solicitar")
+    Call<SolicitarRecuperacionResponse> solicitarRecuperacion(
+            @Body SolicitarRecuperacionRequest request
+    );
+
+    @POST("api/auth/password/restablecer")
+    Call<ResponseBody> restablecerPassword(
+            @Body RestablecerPasswordRequest request
     );
 
 }

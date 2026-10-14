@@ -168,4 +168,48 @@ public class CalificacionService {
                 calificacion.getFechaCalificacion()
         );
     }
+    public List<co.edu.unipiloto.ailearning.api.dto.MiCalificacionResponse>
+    obtenerMisCalificaciones(
+            Long usuarioId,
+            Long cursoId) {
+
+        Usuario estudiante = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() ->
+                        new RuntimeException("El usuario no existe")
+                );
+
+        if (estudiante.getRol() != Rol.ESTUDIANTE) {
+            throw new AccesoDenegadoException(
+                    "Solo un estudiante puede consultar sus calificaciones"
+            );
+        }
+
+        if (!inscripcionRepository.existsByUsuarioIdAndCursoId(
+                usuarioId,
+                cursoId)) {
+
+            throw new AccesoDenegadoException(
+                    "El estudiante no esta inscrito en el curso"
+            );
+        }
+
+        return calificacionRepository
+                .findByEstudianteIdAndActividadCursoIdOrderByActividadIdAsc(
+                        usuarioId,
+                        cursoId
+                )
+                .stream()
+                .map(calificacion ->
+                        new co.edu.unipiloto.ailearning.api.dto.MiCalificacionResponse(
+                                calificacion.getActividad().getId(),
+                                calificacion.getActividad().getDescripcion(),
+                                calificacion.getNota(),
+                                calificacion.getActividad().getPonderacion(),
+                                calificacion.getRetroalimentacion(),
+                                calificacion.getFechaCalificacion()
+                        )
+                )
+                .toList();
+    }
+
 }

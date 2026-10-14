@@ -126,12 +126,12 @@ public class CursosActivity extends AppCompatActivity {
                     if (response.code() == 500) {
 
                         Toast.makeText(CursosActivity.this,
-                                "Ya estÃ¡s inscrito en este curso.", Toast.LENGTH_LONG).show();
+                                "Ya estás inscrito en este curso.", Toast.LENGTH_LONG).show();
 
                     } else {
 
                         Toast.makeText(CursosActivity.this,
-                                "No se pudo realizar la inscripciÃ³n. CÃ³digo: " + response.code(), Toast.LENGTH_LONG).show();
+                                "No se pudo realizar la inscripción. Código: " + response.code(), Toast.LENGTH_LONG).show();
 
                     }
 
@@ -143,7 +143,7 @@ public class CursosActivity extends AppCompatActivity {
             public void onFailure(Call<co.edu.unipiloto.ailearningmobile.dto.InscripcionResponse> call, Throwable t) {
 
                 Toast.makeText(CursosActivity.this,
-                        "Error de conexiÃ³n con el servidor.", Toast.LENGTH_LONG).show();
+                        "Error de conexión con el servidor.", Toast.LENGTH_LONG).show();
 
             }
 
@@ -171,7 +171,7 @@ public class CursosActivity extends AppCompatActivity {
                     Call<List<CursoResponse>> call,
                     Throwable t) {
 
-                mostrarError("Error de conexiÃ³n con el servidor.");
+                mostrarError("Error de conexión con el servidor.");
             }
         });
     }
@@ -207,7 +207,7 @@ public class CursosActivity extends AppCompatActivity {
                     Call<List<CursoResponse>> call,
                     Throwable t) {
 
-                mostrarError("Error de conexiÃ³n con el servidor.");
+                mostrarError("Error de conexión con el servidor.");
             }
         });
     }
@@ -234,7 +234,7 @@ public class CursosActivity extends AppCompatActivity {
         } else {
 
             mostrarError(
-                    "No se pudieron cargar los cursos. CÃ³digo: " +
+                    "No se pudieron cargar los cursos. Código: " +
                     response.code()
             );
         }

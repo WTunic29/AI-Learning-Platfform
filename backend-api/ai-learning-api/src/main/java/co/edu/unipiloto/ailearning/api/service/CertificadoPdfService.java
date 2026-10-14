@@ -5,6 +5,7 @@ import co.edu.unipiloto.ailearning.api.model.Certificado;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
 
@@ -15,122 +16,166 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class CertificadoPdfService {
 
-    public byte[] generarPdf(Certificado certificado) {
+    public byte[] generarPdf(
+            Certificado certificado) {
+
+        PDRectangle landscape =
+                new PDRectangle(
+                        PDRectangle.A4.getHeight(),
+                        PDRectangle.A4.getWidth()
+                );
 
         try (
-                PDDocument document = new PDDocument();
-                ByteArrayOutputStream output = new ByteArrayOutputStream()
+                PDDocument document =
+                        new PDDocument();
+
+                ByteArrayOutputStream output =
+                        new ByteArrayOutputStream()
         ) {
 
-            PDPage page = new PDPage();
+            PDPage page =
+                    new PDPage(landscape);
+
             document.addPage(page);
 
-            try (PDPageContentStream content =
-                         new PDPageContentStream(document, page)) {
+            float ancho =
+                    page.getMediaBox()
+                            .getWidth();
 
-                escribir(
+            float alto =
+                    page.getMediaBox()
+                            .getHeight();
+
+            try (
+                    PDPageContentStream content =
+                            new PDPageContentStream(
+                                    document,
+                                    page
+                            )
+            ) {
+
+                dibujarBordes(
+                        content,
+                        ancho,
+                        alto
+                );
+
+                textoCentrado(
                         content,
                         "NEXALEARN",
                         PDType1Font.HELVETICA_BOLD,
-                        26,
-                        230,
-                        700
+                        30,
+                        ancho,
+                        alto - 95
                 );
 
-                escribir(
+                textoCentrado(
                         content,
                         "CERTIFICADO DE APROBACION",
                         PDType1Font.HELVETICA_BOLD,
-                        20,
-                        145,
-                        650
+                        23,
+                        ancho,
+                        alto - 145
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "NexaLearn certifica que:",
+                        "NexaLearn certifica que",
                         PDType1Font.HELVETICA,
-                        13,
-                        220,
-                        590
+                        14,
+                        ancho,
+                        alto - 205
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        certificado.getUsuario().getNombre(),
+                        limpiar(
+                                certificado
+                                        .getUsuario()
+                                        .getNombre()
+                        ),
                         PDType1Font.HELVETICA_BOLD,
-                        22,
-                        180,
-                        545
+                        28,
+                        ancho,
+                        alto - 250
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "ha completado y aprobado satisfactoriamente el curso:",
+                        "ha completado y aprobado satisfactoriamente el curso",
                         PDType1Font.HELVETICA,
-                        13,
-                        120,
-                        500
+                        14,
+                        ancho,
+                        alto - 300
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        certificado.getCurso().getNombre(),
+                        limpiar(
+                                certificado
+                                        .getCurso()
+                                        .getNombre()
+                        ),
                         PDType1Font.HELVETICA_BOLD,
-                        17,
-                        120,
-                        455
+                        21,
+                        ancho,
+                        alto - 345
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "Promedio final: " + certificado.getPromedio(),
-                        PDType1Font.HELVETICA,
-                        13,
-                        210,
-                        405
+                        "Promedio final: "
+                                + certificado
+                                .getPromedio(),
+                        PDType1Font.HELVETICA_BOLD,
+                        16,
+                        ancho,
+                        alto - 405
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "Fecha de emision: " +
-                                certificado.getFechaEmision()
-                                        .format(
-                                                DateTimeFormatter.ofPattern(
-                                                        "dd/MM/yyyy HH:mm"
+                        "Fecha de emision: "
+                                + certificado
+                                .getFechaEmision()
+                                .format(
+                                        DateTimeFormatter
+                                                .ofPattern(
+                                                        "dd/MM/yyyy"
                                                 )
-                                        ),
+                                ),
                         PDType1Font.HELVETICA,
-                        11,
-                        190,
-                        355
+                        12,
+                        ancho,
+                        alto - 445
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "Codigo de verificacion:",
+                        "Codigo unico de verificacion",
                         PDType1Font.HELVETICA_BOLD,
                         11,
-                        215,
-                        305
+                        ancho,
+                        alto - 495
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        certificado.getCodigoVerificacion(),
+                        certificado
+                                .getCodigoVerificacion(),
                         PDType1Font.COURIER_BOLD,
-                        12,
-                        170,
-                        280
+                        16,
+                        ancho,
+                        alto - 522
                 );
 
-                escribir(
+                textoCentrado(
                         content,
-                        "NexaLearn - Plataforma de formacion en Inteligencia Artificial",
+                        "Documento generado digitalmente por NexaLearn",
                         PDType1Font.HELVETICA_OBLIQUE,
-                        9,
-                        135,
-                        120
+                        10,
+                        ancho,
+                        55
                 );
             }
 
@@ -147,22 +192,73 @@ public class CertificadoPdfService {
         }
     }
 
-    private void escribir(
+    private void dibujarBordes(
+            PDPageContentStream content,
+            float ancho,
+            float alto) throws IOException {
+
+        content.setLineWidth(3f);
+
+        content.addRect(
+                28,
+                28,
+                ancho - 56,
+                alto - 56
+        );
+
+        content.stroke();
+
+        content.setLineWidth(1f);
+
+        content.addRect(
+                40,
+                40,
+                ancho - 80,
+                alto - 80
+        );
+
+        content.stroke();
+    }
+
+    private void textoCentrado(
             PDPageContentStream content,
             String texto,
             PDType1Font fuente,
             float tamano,
-            float x,
+            float anchoPagina,
             float y) throws IOException {
 
+        String limpio =
+                limpiar(texto);
+
+        float anchoTexto =
+                fuente.getStringWidth(limpio)
+                        / 1000f
+                        * tamano;
+
+        float x =
+                (anchoPagina - anchoTexto)
+                        / 2f;
+
         content.beginText();
-        content.setFont(fuente, tamano);
-        content.newLineAtOffset(x, y);
-        content.showText(limpiar(texto));
+
+        content.setFont(
+                fuente,
+                tamano
+        );
+
+        content.newLineAtOffset(
+                x,
+                y
+        );
+
+        content.showText(limpio);
+
         content.endText();
     }
 
-    private String limpiar(String texto) {
+    private String limpiar(
+            String texto) {
 
         if (texto == null) {
             return "";
