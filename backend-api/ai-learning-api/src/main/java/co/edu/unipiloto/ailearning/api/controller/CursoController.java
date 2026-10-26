@@ -1,5 +1,6 @@
 package co.edu.unipiloto.ailearning.api.controller;
 
+import co.edu.unipiloto.ailearning.api.dto.CursoRequest;
 import co.edu.unipiloto.ailearning.api.dto.CursoResponse;
 import co.edu.unipiloto.ailearning.api.service.CursoService;
 
@@ -24,6 +25,43 @@ public class CursoController {
         return ResponseEntity.ok(
                 cursoService.obtenerTodosLosCursos()
         );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CursoResponse> obtenerCursoPorId(
+            @PathVariable Long id){
+
+        return ResponseEntity.ok(
+                cursoService.obtenerCursoPorId(id)
+        );
+    }
+
+    @PostMapping
+    public ResponseEntity<CursoResponse> crearCurso(
+            @RequestBody CursoRequest request){
+
+        return ResponseEntity.ok(
+                cursoService.crearCurso(request)
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CursoResponse> actualizarCurso(
+            @PathVariable Long id,
+            @RequestBody CursoRequest request){
+
+        return ResponseEntity.ok(
+                cursoService.actualizarCurso(id, request)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarCurso(
+            @PathVariable Long id){
+
+        cursoService.eliminarCurso(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/buscar")

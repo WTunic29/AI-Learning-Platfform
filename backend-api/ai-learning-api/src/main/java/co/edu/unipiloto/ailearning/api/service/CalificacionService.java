@@ -76,13 +76,13 @@ public class CalificacionService {
                         cursoId)) {
 
             throw new RuntimeException(
-                    "El estudiante no está inscrito en el curso"
+                    "El estudiante no estÃ¡ inscrito en el curso"
             );
         }
 
         if (request.getNota() == null) {
             throw new RuntimeException(
-                    "La calificación es obligatoria"
+                    "La calificaciÃ³n es obligatoria"
             );
         }
 
@@ -212,4 +212,31 @@ public class CalificacionService {
                 .toList();
     }
 
+    public void eliminarCalificacion(
+            Long id,
+            Long actorId) {
+
+        Usuario actor = usuarioRepository.findById(actorId)
+                .orElseThrow(() ->
+                        new org.springframework.web.server.ResponseStatusException(
+                                org.springframework.http.HttpStatus.NOT_FOUND,
+                                "El usuario no existe"));
+
+        if (!autorizacionService.tienePermiso(
+                actor,
+                Permiso.REGISTRAR_CALIFICACION)) {
+
+            throw new AccesoDenegadoException(
+                    "El usuario no tiene permiso para eliminar calificaciones");
+        }
+
+        Calificacion calificacion =
+                calificacionRepository.findById(id)
+                        .orElseThrow(() ->
+                                new org.springframework.web.server.ResponseStatusException(
+                                        org.springframework.http.HttpStatus.NOT_FOUND,
+                                        "La calificación no existe"));
+
+        calificacionRepository.delete(calificacion);
+    }
 }

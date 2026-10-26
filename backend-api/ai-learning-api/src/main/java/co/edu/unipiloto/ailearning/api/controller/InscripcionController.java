@@ -32,4 +32,16 @@ public class InscripcionController {
         List<InscripcionResponse> inscripciones = inscripcionService.obtenerInscripciones(usuarioId);
         return ResponseEntity.ok(inscripciones);
     }
+
+    @DeleteMapping("/{usuarioId}/{cursoId}")
+    public ResponseEntity<Void> desinscribir(
+            @PathVariable Long usuarioId,
+            @PathVariable Long cursoId) {
+
+        inscripcionService.desinscribir(
+                usuarioId,
+                cursoId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

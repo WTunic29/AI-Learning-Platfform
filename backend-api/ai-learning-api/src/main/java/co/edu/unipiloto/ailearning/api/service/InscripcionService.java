@@ -37,7 +37,7 @@ public class InscripcionService {
 
         if (inscripcionRepository.existsByUsuarioIdAndCursoId(usuarioId, cursoId)){
 
-            throw new RuntimeException("El estudiante ya está inscrito en el curso");
+            throw new RuntimeException("El estudiante ya estÃ¡ inscrito en el curso");
 
         }
 
@@ -71,4 +71,20 @@ public class InscripcionService {
 
     }
 
+    public void desinscribir(
+            Long usuarioId,
+            Long cursoId) {
+
+        Inscripcion inscripcion =
+                inscripcionRepository
+                        .findByUsuarioIdAndCursoId(
+                                usuarioId,
+                                cursoId)
+                        .orElseThrow(() ->
+                                new org.springframework.web.server.ResponseStatusException(
+                                        org.springframework.http.HttpStatus.NOT_FOUND,
+                                        "La inscripción no existe"));
+
+        inscripcionRepository.delete(inscripcion);
+    }
 }

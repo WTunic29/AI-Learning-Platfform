@@ -75,4 +75,15 @@ public class CalificacionController {
         );
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(
+            @PathVariable Long id,
+            @RequestParam Long actorId) {
+
+        calificacionService.eliminarCalificacion(
+                id,
+                actorId);
+
+        return ResponseEntity.noContent().build();
+    }
 }
