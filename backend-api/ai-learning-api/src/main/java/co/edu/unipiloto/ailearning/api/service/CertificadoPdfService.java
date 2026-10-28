@@ -2,6 +2,20 @@ package co.edu.unipiloto.ailearning.api.service;
 
 import co.edu.unipiloto.ailearning.api.model.Certificado;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -177,6 +191,9 @@ public class CertificadoPdfService {
                         ancho,
                         55
                 );
+
+                insertarQR(document, content, certificado.getCodigoVerificacion(), ancho);
+
             }
 
             document.save(output);
@@ -190,6 +207,38 @@ public class CertificadoPdfService {
                     e
             );
         }
+    }
+
+    private BufferedImage generarImagenQR(String contenido) {
+
+        try {
+
+            QRCodeWriter qrWriter = new QRCodeWriter();
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+
+            hints.put(EncodeHintType.MARGIN, 1);
+            BitMatrix matriz = qrWriter.encode(contenido, BarcodeFormat.QR_CODE, 250, 250, hints);
+
+            return MatrixToImageWriter.toBufferedImage(matriz);
+
+        } catch (WriterException e) {
+            throw new RuntimeException("No fue posible generar el código QR del certificado", e);
+        }
+
+    }
+
+    private void insertarQR(PDDocument document, PDPageContentStream content, String codigoVerificacion, float anchoPagina) throws IOException {
+
+        String urlVerificacion = "http://localhost:8080/api/certificados/verificar/" + codigoVerificacion;
+        BufferedImage imagenQR = generarImagenQR(urlVerificacion);
+        PDImageXObject imagenPDF = LosslessFactory.createFromImage(document, imagenQR);
+
+        float tamanoQR = 90f;
+        float x = anchoPagina - tamanoQR - 55f;
+        float y = 55f;
+
+        content.drawImage(imagenPDF, x, y, tamanoQR, tamanoQR);
+
     }
 
     private void dibujarBordes(

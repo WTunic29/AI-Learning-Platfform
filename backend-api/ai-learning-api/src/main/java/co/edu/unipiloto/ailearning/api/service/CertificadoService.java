@@ -33,6 +33,7 @@ public class CertificadoService {
     private final CertificadoPdfService certificadoPdfService;
 
     public CertificadoService(
+
             CertificadoRepository certificadoRepository,
             UsuarioRepository usuarioRepository,
             CursoRepository cursoRepository,
@@ -201,6 +202,21 @@ public class CertificadoService {
                 .stream()
                 .map(this::convertir)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public CertificadoResponse verificarPorCodigo(String codigoVerificacion) {
+
+        if (codigoVerificacion == null || codigoVerificacion.isBlank()) {
+            throw new IllegalArgumentException("El código de verificación es obligatorio");
+        }
+
+        String codigo = codigoVerificacion.trim();
+
+        Certificado certificado = certificadoRepository.findByCodigoVerificacion(codigo).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontró un certificado con el código proporcionado"));
+        return convertir(certificado);
+
     }
 
     @Transactional(readOnly = true)

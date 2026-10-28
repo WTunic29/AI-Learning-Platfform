@@ -72,4 +72,11 @@ public class CertificadoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
+
+    @GetMapping("/verificar/{codigoVerificacion}")
+    public ResponseEntity<CertificadoResponse> verificarCertificado(@PathVariable String codigoVerificacion) {
+        CertificadoResponse certificado = certificadoService.verificarPorCodigo(codigoVerificacion);
+        return ResponseEntity.ok(certificado);
+    }
+
 }

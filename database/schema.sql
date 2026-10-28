@@ -143,3 +143,51 @@ SELECT id, titulo, descripcion, orden, curso_id
 FROM modulos
 WHERE curso_id = 1
 ORDER BY orden;
+
+SELECT table_schema, table_name
+FROM information_schema.tables
+WHERE table_type = 'BASE TABLE'
+  AND table_schema NOT IN ('pg_catalog', 'information_schema')
+ORDER BY table_schema, table_name;
+
+SELECT
+    id,
+    titulo,
+    descripcion,
+    orden,
+    curso_id
+FROM public.modulos
+WHERE curso_id = 1
+ORDER BY orden;
+
+
+SELECT
+    pm.id AS progreso_id,
+    pm.usuario_id,
+    u.nombre AS estudiante,
+    pm.modulo_id,
+    m.titulo AS modulo,
+    pm.fecha_completado
+FROM public.progreso_modulos pm
+JOIN public.usuarios u
+    ON u.id = pm.usuario_id
+JOIN public.modulos m
+    ON m.id = pm.modulo_id
+WHERE pm.usuario_id = 3
+  AND pm.modulo_id = 2;
+
+
+SELECT a.id AS actividad_id, a.descripcion AS actividad,
+    a.ponderacion, c.nota, c.retroalimentacion
+FROM public.actividades a
+LEFT JOIN public.calificaciones c ON c.actividad_id = a.id AND c.estudiante_id = 3
+WHERE a.curso_id = 1
+ORDER BY a.id;
+
+
+SELECT c.id, c.codigo_verificacion, u.nombre AS estudiante,
+    cu.nombre AS curso, c.promedio, c.fecha_emision
+FROM public.certificados c
+JOIN public.usuarios u ON u.id = c.usuario_id
+JOIN public.cursos cu ON cu.id = c.curso_id
+WHERE c.codigo_verificacion = 'NXL-2026-4BE3B858';

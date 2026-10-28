@@ -91,6 +91,11 @@ public interface ApiService {
             @Path("cursoId") Long cursoId
     );
 
+    @GET("api/certificados/usuario/{usuarioId}")
+    Call<List<CertificadoResponse>> obtenerCertificados(
+            @Path("usuarioId") Long usuarioId
+    );
+
     @GET("api/certificados/{certificadoId}/pdf")
     Call<okhttp3.ResponseBody> descargarCertificado(
             @Path("certificadoId") Long certificadoId,
