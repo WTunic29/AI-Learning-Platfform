@@ -222,14 +222,14 @@ public class CertificadoPdfService {
             return MatrixToImageWriter.toBufferedImage(matriz);
 
         } catch (WriterException e) {
-            throw new RuntimeException("No fue posible generar el código QR del certificado", e);
+            throw new RuntimeException("No fue posible generar el cÃ³digo QR del certificado", e);
         }
 
     }
 
     private void insertarQR(PDDocument document, PDPageContentStream content, String codigoVerificacion, float anchoPagina) throws IOException {
 
-        String urlVerificacion = "http://localhost:8080/api/certificados/verificar/" + codigoVerificacion;
+        String urlVerificacion = "http://localhost:8080/verificar-certificado.html?codigo=" + codigoVerificacion;
         BufferedImage imagenQR = generarImagenQR(urlVerificacion);
         PDImageXObject imagenPDF = LosslessFactory.createFromImage(document, imagenQR);
 
@@ -314,17 +314,17 @@ public class CertificadoPdfService {
         }
 
         return texto
-                .replace("á", "a")
-                .replace("é", "e")
-                .replace("í", "i")
-                .replace("ó", "o")
-                .replace("ú", "u")
-                .replace("Á", "A")
-                .replace("É", "E")
-                .replace("Í", "I")
-                .replace("Ó", "O")
-                .replace("Ú", "U")
-                .replace("ñ", "n")
-                .replace("Ñ", "N");
+                .replace("Ã¡", "a")
+                .replace("Ã©", "e")
+                .replace("Ã­", "i")
+                .replace("Ã³", "o")
+                .replace("Ãº", "u")
+                .replace("Ã", "A")
+                .replace("Ã‰", "E")
+                .replace("Ã", "I")
+                .replace("Ã“", "O")
+                .replace("Ãš", "U")
+                .replace("Ã±", "n")
+                .replace("Ã‘", "N");
     }
 }

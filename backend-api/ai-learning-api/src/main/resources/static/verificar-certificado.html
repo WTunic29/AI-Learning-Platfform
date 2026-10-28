@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verificar certificado | NexaLearn</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #151225,
+                    #241746,
+                    #45206d
+                );
+            color: #1f1f1f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 780px;
+        }
+
+        .brand {
+            text-align: center;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 40px;
+            letter-spacing: 2px;
+        }
+
+        .brand p {
+            margin-top: 8px;
+            opacity: .85;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 25px 60px rgba(0,0,0,.30);
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #32165a;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 28px;
+        }
+
+        .form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 26px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px 17px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #58358a;
+        }
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            background: #3b1c64;
+            color: white;
+            padding: 0 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: .92;
+        }
+
+        .resultado {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .estado {
+            text-align: center;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 22px;
+        }
+
+        .valido {
+            background: #e8f8ef;
+            color: #197343;
+        }
+
+        .invalido {
+            background: #fdecec;
+            color: #b3261e;
+        }
+
+        .datos {
+            border: 1px solid #eee;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .fila {
+            display: grid;
+            grid-template-columns: 190px 1fr;
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fila:last-child {
+            border-bottom: none;
+        }
+
+        .etiqueta {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .codigo {
+            font-family: Consolas, monospace;
+            font-weight: bold;
+            color: #32165a;
+        }
+
+        .footer {
+            color: rgba(255,255,255,.75);
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .form {
+                flex-direction: column;
+            }
+
+            button {
+                padding: 15px;
+            }
+
+            .fila {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .card {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="brand">
+        <h1>NEXALEARN</h1>
+        <p>Plataforma de aprendizaje virtual</p>
+    </div>
+
+    <div class="card">
+
+        <h2>Verificación de certificado</h2>
+
+        <div class="subtitle">
+            Ingrese el código único que aparece en el certificado
+            o escanee su código QR.
+        </div>
+
+        <div class="form">
+
+            <input
+                id="codigo"
+                type="text"
+                placeholder="Ej. NXL-2026-049FCA77"
+                autocomplete="off"
+            >
+
+            <button onclick="verificar()">
+                Verificar
+            </button>
+
+        </div>
+
+        <div id="resultado" class="resultado">
+
+            <div id="estado" class="estado"></div>
+
+            <div id="datos" class="datos">
+
+                <div class="fila">
+                    <div class="etiqueta">Estudiante</div>
+                    <div id="nombre"></div>
+                </div>
+
+                <div class="fila">
+                    <div class="etiqueta">Curso</div>
+                    <div id="curso"></div>
+                </div>
+
+                <div class="fila">
+                    <div class="etiqueta">Promedio final</div>
+                    <div id="promedio"></div>
+                </div>
+
+                <div class="fila">
+                    <div class="etiqueta">Fecha de emisión</div>
+                    <div id="fecha"></div>
+                </div>
+
+                <div class="fila">
+                    <div class="etiqueta">Código de verificación</div>
+                    <div id="codigoResultado" class="codigo"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        NexaLearn · Verificación pública de certificados digitales
+    </div>
+
+</div>
+
+<script>
+
+const inputCodigo = document.getElementById("codigo");
+
+inputCodigo.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        verificar();
+    }
+});
+
+async function verificar() {
+
+    const codigo =
+        inputCodigo.value
+            .trim()
+            .toUpperCase();
+
+    if (!codigo) {
+        mostrarInvalido(
+            "Ingrese un código de verificación."
+        );
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "/api/certificados/verificar/" +
+            encodeURIComponent(codigo)
+        );
+
+        if (!response.ok) {
+
+            mostrarInvalido(
+                "Certificado no válido o inexistente"
+            );
+
+            return;
+        }
+
+        const certificado =
+            await response.json();
+
+        mostrarValido(certificado);
+
+    } catch (error) {
+
+        mostrarInvalido(
+            "No fue posible conectarse con el servicio de verificación."
+        );
+    }
+}
+
+function mostrarValido(certificado) {
+
+    const resultado =
+        document.getElementById("resultado");
+
+    const estado =
+        document.getElementById("estado");
+
+    resultado.style.display = "block";
+
+    estado.className =
+        "estado valido";
+
+    estado.textContent =
+        "✓ Certificado válido";
+
+    document.getElementById("datos")
+        .style.display = "block";
+
+    document.getElementById("nombre")
+        .textContent =
+        certificado.nombreEstudiante;
+
+    document.getElementById("curso")
+        .textContent =
+        certificado.nombreCurso;
+
+    document.getElementById("promedio")
+        .textContent =
+        certificado.promedio;
+
+    document.getElementById("codigoResultado")
+        .textContent =
+        certificado.codigoVerificacion;
+
+    document.getElementById("fecha")
+        .textContent =
+        formatearFecha(
+            certificado.fechaEmision
+        );
+}
+
+function mostrarInvalido(mensaje) {
+
+    const resultado =
+        document.getElementById("resultado");
+
+    const estado =
+        document.getElementById("estado");
+
+    resultado.style.display =
+        "block";
+
+    estado.className =
+        "estado invalido";
+
+    estado.textContent =
+        "✕ " + mensaje;
+
+    document.getElementById("datos")
+        .style.display =
+        "none";
+}
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+        return "-";
+    }
+
+    const valor =
+        new Date(fecha);
+
+    return valor.toLocaleDateString(
+        "es-CO",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+}
+
+const parametros =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const codigoUrl =
+    parametros.get("codigo");
+
+if (codigoUrl) {
+
+    inputCodigo.value =
+        codigoUrl;
+
+    verificar();
+}
+
+</script>
+
+</body>
+</html>

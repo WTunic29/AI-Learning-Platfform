@@ -208,13 +208,13 @@ public class CertificadoService {
     public CertificadoResponse verificarPorCodigo(String codigoVerificacion) {
 
         if (codigoVerificacion == null || codigoVerificacion.isBlank()) {
-            throw new IllegalArgumentException("El código de verificación es obligatorio");
+            throw new IllegalArgumentException("El cÃƒÂ³digo de verificaciÃƒÂ³n es obligatorio");
         }
 
         String codigo = codigoVerificacion.trim();
 
         Certificado certificado = certificadoRepository.findByCodigoVerificacion(codigo).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontró un certificado con el código proporcionado"));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No se encontrÃƒÂ³ un certificado con el cÃƒÂ³digo proporcionado"));
         return convertir(certificado);
 
     }
