@@ -5,6 +5,7 @@ import co.edu.unipiloto.ailearningmobile.dto.*;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.POST;
 import okhttp3.ResponseBody;
 import retrofit2.http.PUT;
@@ -26,6 +27,12 @@ public interface ApiService {
     @GET("api/usuarios/buscar")
     Call<List<UsuarioResponse>> buscarUsuarios(
             @Query("termino") String termino
+    );
+
+    @DELETE("api/usuarios/{id}")
+    Call<Void> eliminarUsuario(
+            @Path("id") Long id,
+            @Query("actorId") Long actorId
     );
 
     @GET("api/cursos")

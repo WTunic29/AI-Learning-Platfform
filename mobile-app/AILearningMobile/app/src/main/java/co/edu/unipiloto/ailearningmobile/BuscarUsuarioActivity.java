@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
@@ -140,6 +141,126 @@ public class BuscarUsuarioActivity extends AppCompatActivity {
         botones.addView(btnAdmin);
 
         contenedorResultados.addView(botones);
+
+        if (!usuario.getId().equals(actorId)) {
+
+            Button btnEliminar = new Button(this);
+            btnEliminar.setText("ELIMINAR USUARIO");
+
+            btnEliminar.setOnClickListener(v ->
+                    confirmarEliminarUsuario(usuario));
+
+            contenedorResultados.addView(btnEliminar);
+
+        } else {
+
+            TextView aviso = new TextView(this);
+            aviso.setText("No puedes eliminar tu propio usuario administrador.");
+            aviso.setPadding(0, 8, 0, 8);
+
+            contenedorResultados.addView(aviso);
+        }
+    }
+
+    private void confirmarEliminarUsuario(UsuarioResponse usuario) {
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar usuario")
+                .setMessage(
+        "\u00BFEst\u00E1 seguro de eliminar al usuario " +
+        usuario.getNombre() +
+        "?\n\nEsta acci\u00F3n no se puede deshacer."
+)
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Eliminar", (dialog, which) ->
+                        eliminarUsuario(usuario.getId()))
+                .show();
+    }
+
+    private void eliminarUsuario(Long usuarioId) {
+
+        ApiService apiService =
+                RetrofitClient.getApiService();
+
+        apiService.eliminarUsuario(
+                usuarioId,
+                actorId
+        ).enqueue(new Callback<Void>() {
+
+            @Override
+            public void onResponse(
+                    Call<Void> call,
+                    Response<Void> response) {
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "Usuario eliminado correctamente",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                    buscarUsuarios();
+                    return;
+                }
+
+                if (response.code() == 400) {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "No puedes eliminar tu propio usuario",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                } else if (response.code() == 403) {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "No tienes permisos para eliminar usuarios",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                } else if (response.code() == 404) {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "El usuario ya no existe",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                    buscarUsuarios();
+
+                } else if (response.code() == 409) {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "No se puede eliminar porque el usuario tiene informaciÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n acadÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â©mica asociada",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+                } else {
+
+                    Toast.makeText(
+                            BuscarUsuarioActivity.this,
+                            "Error al eliminar usuario: " +
+                                    response.code(),
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<Void> call,
+                    Throwable t) {
+
+                Toast.makeText(
+                        BuscarUsuarioActivity.this,
+                        "No se pudo conectar con el servidor",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
     }
 
     private void cambiarRol(Long id, String rol) {
@@ -192,3 +313,4 @@ public class BuscarUsuarioActivity extends AppCompatActivity {
         contenedorResultados.addView(texto);
     }
 }
+
