@@ -77,20 +77,41 @@
             android:visibility="gone" />
 
         <Button
+
             android:id="@+id/btnCertificados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Mis certificados"
             android:textAllCaps="false"
             android:layout_marginBottom="16dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+
+            />
 
         <Button
+
+            android:id="@+id/btnEspaciosEducativos"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+
+            android:text = "Espacios educativos cercanos"
+            android:textAllCaps="false"
+
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+
+            />
+
+
+        <Button
+
             android:id="@+id/btnCerrarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cerrar sesión"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+
+            />
 
     </LinearLayout>
 

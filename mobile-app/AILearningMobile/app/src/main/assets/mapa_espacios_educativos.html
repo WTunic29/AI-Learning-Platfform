@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+
+    >
+
+    <title>Espacios educativos cercanos</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #mapa {
+            height: 100%;
+            width: 100%;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="mapa"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    // Crear el mapa centrado inicialmente en Bogotá.
+    const mapa = L.map('mapa').setView(
+        [4.7110, -74.0721],
+        13
+    );
+
+    // Cargar los mapas de OpenStreetMap.
+    L.tileLayer(
+        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(mapa);
+
+    // Grupo único para los marcadores educativos.
+    const marcadoresEspacios = L.layerGroup().addTo(mapa);
+    let marcadorEstudiante = null;
+
+    // Evitar interpretar los datos recibidos como código HTML.
+    function escaparHTML(valor) {
+        const elemento = document.createElement('div');
+        elemento.textContent = valor == null ? '' : String(valor);
+        return elemento.innerHTML;
+    }
+
+    // Agregar un espacio educativo al mapa.
+    function agregarEspacioEducativo(
+        id,
+        nombre,
+        direccion,
+        tipo,
+        latitud,
+        longitud
+    ) {
+        const marcador = L.marker([latitud, longitud])
+            .addTo(marcadoresEspacios);
+
+        const contenido = `
+            <strong>${escaparHTML(nombre)}</strong><br>
+            ${escaparHTML(tipo)}<br>
+            ${escaparHTML(direccion)}
+        `;
+
+        marcador.bindPopup(contenido);
+    }
+
+    function mostrarUbicacionEstudiante(latitud, longitud) {
+    latitud = Number(latitud);
+    longitud = Number(longitud);
+
+    if (!Number.isFinite(latitud) || !Number.isFinite(longitud) ||
+        latitud < -90 || latitud > 90 ||
+        longitud < -180 || longitud > 180) {
+        console.error('Las coordenadas del estudiante no son válidas.');
+        return;
+    }
+
+    const coordenadasEstudiante = [latitud, longitud];
+
+    if (marcadorEstudiante !== null) {
+        mapa.removeLayer(marcadorEstudiante);
+    }
+
+    marcadorEstudiante = L.marker(coordenadasEstudiante)
+        .addTo(mapa)
+        .bindPopup('<strong>Tu ubicación</strong>');
+
+    mapa.setView(coordenadasEstudiante, 14);
+    }
+
+    // Eliminar marcadores anteriores.
+    function limpiarEspaciosEducativos() {
+        marcadoresEspacios.clearLayers();
+    }
+
+    // Recibir los espacios educativos desde Android.
+    function recibirEspaciosEducativos(datos) {
+        limpiarEspaciosEducativos();
+
+        let espacios;
+
+        try {
+            espacios = typeof datos === 'string'
+                ? JSON.parse(datos)
+                : datos;
+        } catch (error) {
+            console.error(
+                'Error al interpretar los espacios educativos:',
+                error
+            );
+            return;
+        }
+
+        if (!Array.isArray(espacios)) {
+            console.error(
+                'Los espacios educativos deben recibirse como una lista.'
+            );
+            return;
+        }
+
+        espacios.forEach(function (espacio) {
+            const latitud = Number(espacio.latitud);
+            const longitud = Number(espacio.longitud);
+
+            if (
+                !Number.isFinite(latitud) ||
+                !Number.isFinite(longitud) ||
+                latitud < -90 ||
+                latitud > 90 ||
+                longitud < -180 ||
+                longitud > 180
+            ) {
+                console.warn(
+                    'Coordenadas inválidas para el espacio:',
+                    espacio.id
+                );
+                return;
+            }
+
+            agregarEspacioEducativo(
+                espacio.id,
+                espacio.nombre || 'Espacio educativo',
+                espacio.direccion || 'Dirección no disponible',
+                espacio.tipo || 'Tipo no especificado',
+                latitud,
+                longitud
+            );
+        });
+
+        // Ajustar el mapa para mostrar los marcadores recibidos.
+        const coordenadas = [];
+
+        marcadoresEspacios.eachLayer(function (marcador) {
+            coordenadas.push(marcador.getLatLng());
+        });
+
+        if (coordenadas.length === 1) {
+            mapa.setView(coordenadas[0], 15);
+        } else if (coordenadas.length > 1) {
+            mapa.fitBounds(
+                L.latLngBounds(coordenadas),
+                {
+                    padding: [30, 30],
+                    maxZoom: 15
+                }
+            );
+        }
+    }
+</script>
+
+</body>
+
+</html>

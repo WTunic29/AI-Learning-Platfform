@@ -191,3 +191,47 @@ FROM public.certificados c
 JOIN public.usuarios u ON u.id = c.usuario_id
 JOIN public.cursos cu ON cu.id = c.curso_id
 WHERE c.codigo_verificacion = 'NXL-2026-4BE3B858';
+
+-- Para confirmar la creación de la tabla espacios_educativos --
+
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'espacios_educativos'
+ORDER BY ordinal_position;
+
+-- Para insertar tres registros de prueba en Bogotá --
+
+INSERT INTO espacios_educativos (nombre, descripcion, direccion, tipo, latitud, longitud, activo)
+VALUES (
+        'Espacio educativo de prueba 1',
+        'Registro de prueba para validar la geolocalizacion.',
+        'Bogota, Colombia',
+        'Biblioteca',
+        4.6280,
+        -74.0640,
+        TRUE
+    ),
+    (
+        'Espacio educativo de prueba 2',
+        'Registro de prueba para validar los marcadores del mapa.',
+        'Bogota, Colombia',
+        'Centro educativo',
+        4.6350,
+        -74.0700,
+        TRUE
+    ),
+    (
+        'Espacio educativo de prueba 3',
+        'Registro de prueba para comprobar la consulta de espacios.',
+        'Bogota, Colombia',
+        'Centro cultural',
+        4.6150,
+        -74.0800,
+        TRUE
+    );
+
+-- Para comprobar que se insertaron los datos --
+
+SELECT id, nombre, tipo, latitud, longitud, activo
+FROM espacios_educativos
+ORDER BY id;

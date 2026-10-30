@@ -43,6 +43,8 @@ public class Home extends AppCompatActivity {
                         R.id.btnCertificados
                 );
 
+        Button btnEspaciosEducativos = (findViewById(R.id.btnEspaciosEducativos));
+
         Button btnCerrarSesion =
                 findViewById(
                         R.id.btnCerrarSesion
@@ -86,6 +88,8 @@ public class Home extends AppCompatActivity {
         btnCertificados
                 .setVisibility(View.GONE);
 
+        btnEspaciosEducativos.setVisibility(View.GONE);
+
         if ("ESTUDIANTE"
                 .equalsIgnoreCase(rol)) {
 
@@ -98,6 +102,8 @@ public class Home extends AppCompatActivity {
                     .setVisibility(
                             View.VISIBLE
                     );
+
+            btnEspaciosEducativos.setVisibility(View.VISIBLE);
 
         } else if ("DOCENTE"
                 .equalsIgnoreCase(rol)) {
@@ -228,6 +234,15 @@ public class Home extends AppCompatActivity {
             );
 
             startActivity(intent);
+        });
+
+        btnEspaciosEducativos.setOnClickListener(v -> {
+
+            Intent intent = new Intent(Home.this, MapaEspaciosEducativosActivity.class);
+            intent.putExtra("usuarioId", usuarioId);
+
+            startActivity(intent);
+
         });
 
         btnCerrarSesion

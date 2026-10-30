@@ -130,4 +130,7 @@ public interface ApiService {
             @Body RestablecerPasswordRequest request
     );
 
+    @GET("api/espacios-educativos")
+    Call<List<EspacioEducativoResponse>> obtenerEspaciosEducativos();
+
 }
