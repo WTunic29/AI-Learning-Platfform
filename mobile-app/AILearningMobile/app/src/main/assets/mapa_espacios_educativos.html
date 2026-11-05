@@ -1,57 +1,308 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <meta
-
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-
-    >
-
-    <title>Espacios educativos cercanos</title>
+    <title>NexaLearn - Espacios educativos</title>
 
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
+        * { box-sizing: border-box; }
 
         html, body {
-            height: 100%;
             width: 100%;
+            height: 100%;
             margin: 0;
-            padding: 0;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f6f3fb;
         }
 
         #mapa {
-            height: 100%;
-            width: 100%;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
         }
 
-    </style>
+        .panel {
+            position: absolute;
+            z-index: 1000;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255,255,255,.97);
+            border-radius: 18px;
+            padding: 12px;
+            box-shadow: 0 8px 28px rgba(50,25,90,.18);
+        }
 
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .titulo {
+            color: #35175e;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .subtitulo {
+            margin-top: 3px;
+            color: #777;
+            font-size: 10px;
+        }
+
+        .contador {
+            background: #efe8fa;
+            color: #5b3a91;
+            padding: 6px 9px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filtros::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            flex: 0 0 auto;
+            border: 1px solid #ddd4ed;
+            background: #fff;
+            color: #4c3a62;
+            padding: 8px 11px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .chip.activo {
+            background: #6848a6;
+            border-color: #6848a6;
+            color: white;
+        }
+
+        .inferior {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 9px;
+        }
+
+        #estado {
+            flex: 1;
+            color: #666;
+            font-size: 10px;
+            line-height: 1.25;
+        }
+
+        .radios {
+            display: flex;
+            gap: 4px;
+        }
+
+        .radio {
+            border: 0;
+            background: #f2eef7;
+            color: #5c4778;
+            padding: 6px 7px;
+            border-radius: 99px;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .radio.activo {
+            background: #35175e;
+            color: white;
+        }
+
+        .pin {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border: 3px solid white;
+            border-radius: 50% 50% 50% 8px;
+            transform: rotate(-45deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,.25);
+            font-size: 17px;
+        }
+
+        .pin span {
+            transform: rotate(45deg);
+        }
+
+        .tu { background: #1565c0; }
+        .universidad { background: #7b1fa2; }
+        .biblioteca { background: #ef6c00; }
+        .colegio { background: #2e7d32; }
+        .otro { background: #5b3a91; }
+
+        .popup-titulo {
+            color: #35175e;
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .popup-linea {
+            color: #555;
+            margin: 3px 0;
+            font-size: 11px;
+        }
+
+        .distancia {
+            display: inline-block;
+            margin-top: 6px;
+            background: #f0ebf8;
+            color: #543784;
+            padding: 5px 8px;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .navegar {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            border: 0;
+            border-radius: 8px;
+            padding: 8px;
+            background: #35175e;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .leyenda {
+            position: absolute;
+            z-index: 1000;
+            left: 12px;
+            right: 12px;
+            bottom: 10px;
+            padding: 8px;
+            background: rgba(255,255,255,.95);
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(50,25,90,.15);
+            color: #666;
+            font-size: 9px;
+            text-align: center;
+        }
+
+        .leaflet-control-zoom {
+            margin-top: 145px !important;
+        }
+    </style>
 </head>
 
 <body>
 
 <div id="mapa"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div class="panel">
+    <div class="cabecera">
+        <div>
+            <div class="titulo">
+                Explorar educaci&oacute;n cerca de ti
+            </div>
+            <div class="subtitulo">
+                Espacios educativos disponibles en NexaLearn
+            </div>
+        </div>
+
+        <div id="contador"
+             class="contador">
+            0 lugares
+        </div>
+    </div>
+
+    <div class="filtros">
+        <button class="chip activo"
+                data-tipo="todos"
+                onclick="filtrar(this)">
+            Todos
+        </button>
+
+        <button class="chip"
+                data-tipo="universidad"
+                onclick="filtrar(this)">
+            &#127891; Universidades
+        </button>
+
+        <button class="chip"
+                data-tipo="biblioteca"
+                onclick="filtrar(this)">
+            &#128218; Bibliotecas
+        </button>
+
+        <button class="chip"
+                data-tipo="colegio"
+                onclick="filtrar(this)">
+            &#127979; Colegios
+        </button>
+    </div>
+
+    <div class="inferior">
+        <div id="estado">
+            Esperando ubicaci&oacute;n...
+        </div>
+
+        <div class="radios">
+            <button class="radio"
+                    data-radio="2"
+                    onclick="cambiarRadio(this)">
+                2 km
+            </button>
+
+            <button class="radio activo"
+                    data-radio="5"
+                    onclick="cambiarRadio(this)">
+                5 km
+            </button>
+
+            <button class="radio"
+                    data-radio="10"
+                    onclick="cambiarRadio(this)">
+                10 km
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="leyenda">
+    &#128205; Azul: tu ubicaci&oacute;n &nbsp;&nbsp;
+    &#127891; Universidad &nbsp;&nbsp;
+    &#128218; Biblioteca &nbsp;&nbsp;
+    &#127979; Colegio
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    const mapa =
+        L.map('mapa')
+            .setView(
+                [4.7110, -74.0721],
+                12
+            );
 
-    // Crear el mapa centrado inicialmente en Bogotá.
-    const mapa = L.map('mapa').setView(
-        [4.7110, -74.0721],
-        13
-    );
-
-    // Cargar los mapas de OpenStreetMap.
     L.tileLayer(
         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
@@ -60,142 +311,282 @@
         }
     ).addTo(mapa);
 
-    // Grupo único para los marcadores educativos.
-    const marcadoresEspacios = L.layerGroup().addTo(mapa);
-    let marcadorEstudiante = null;
+    const capaEspacios =
+        L.layerGroup()
+            .addTo(mapa);
 
-    // Evitar interpretar los datos recibidos como código HTML.
-    function escaparHTML(valor) {
-        const elemento = document.createElement('div');
-        elemento.textContent = valor == null ? '' : String(valor);
-        return elemento.innerHTML;
+    let marcadorUsuario = null;
+    let tipoActual = 'todos';
+    let radioActual = 5;
+
+    function pin(clase, simbolo) {
+        return L.divIcon({
+            className: '',
+            html:
+                '<div class="pin ' + clase + '">' +
+                '<span>' + simbolo + '</span>' +
+                '</div>',
+            iconSize: [34,34],
+            iconAnchor: [17,34],
+            popupAnchor: [0,-32]
+        });
     }
 
-    // Agregar un espacio educativo al mapa.
-    function agregarEspacioEducativo(
-        id,
-        nombre,
-        direccion,
-        tipo,
-        latitud,
-        longitud
+    function escapar(valor) {
+        const div =
+            document.createElement('div');
+
+        div.textContent =
+            valor == null
+                ? ''
+                : String(valor);
+
+        return div.innerHTML;
+    }
+
+    function mostrarUbicacionEstudiante(
+        lat,
+        lon
     ) {
-        const marcador = L.marker([latitud, longitud])
-            .addTo(marcadoresEspacios);
+        lat = Number(lat);
+        lon = Number(lon);
 
-        const contenido = `
-            <strong>${escaparHTML(nombre)}</strong><br>
-            ${escaparHTML(tipo)}<br>
-            ${escaparHTML(direccion)}
-        `;
-
-        marcador.bindPopup(contenido);
-    }
-
-    function mostrarUbicacionEstudiante(latitud, longitud) {
-    latitud = Number(latitud);
-    longitud = Number(longitud);
-
-    if (!Number.isFinite(latitud) || !Number.isFinite(longitud) ||
-        latitud < -90 || latitud > 90 ||
-        longitud < -180 || longitud > 180) {
-        console.error('Las coordenadas del estudiante no son válidas.');
-        return;
-    }
-
-    const coordenadasEstudiante = [latitud, longitud];
-
-    if (marcadorEstudiante !== null) {
-        mapa.removeLayer(marcadorEstudiante);
-    }
-
-    marcadorEstudiante = L.marker(coordenadasEstudiante)
-        .addTo(mapa)
-        .bindPopup('<strong>Tu ubicación</strong>');
-
-    mapa.setView(coordenadasEstudiante, 14);
-    }
-
-    // Eliminar marcadores anteriores.
-    function limpiarEspaciosEducativos() {
-        marcadoresEspacios.clearLayers();
-    }
-
-    // Recibir los espacios educativos desde Android.
-    function recibirEspaciosEducativos(datos) {
-        limpiarEspaciosEducativos();
-
-        let espacios;
-
-        try {
-            espacios = typeof datos === 'string'
-                ? JSON.parse(datos)
-                : datos;
-        } catch (error) {
-            console.error(
-                'Error al interpretar los espacios educativos:',
-                error
+        if (marcadorUsuario) {
+            mapa.removeLayer(
+                marcadorUsuario
             );
-            return;
         }
 
-        if (!Array.isArray(espacios)) {
-            console.error(
-                'Los espacios educativos deben recibirse como una lista.'
+        marcadorUsuario =
+            L.marker(
+                [lat,lon],
+                {
+                    icon: pin(
+                        'tu',
+                        '&#9679;'
+                    ),
+                    zIndexOffset: 1000
+                }
+            )
+            .addTo(mapa)
+            .bindPopup(
+                '<div class="popup-titulo">' +
+                'Tu ubicaci&oacute;n actual' +
+                '</div>'
             );
-            return;
-        }
 
-        espacios.forEach(function (espacio) {
-            const latitud = Number(espacio.latitud);
-            const longitud = Number(espacio.longitud);
+        mapa.setView(
+            [lat,lon],
+            13
+        );
+    }
+
+    function filtrar(boton) {
+        document
+            .querySelectorAll('.chip')
+            .forEach(x =>
+                x.classList.remove('activo')
+            );
+
+        boton.classList.add('activo');
+
+        tipoActual =
+            boton.dataset.tipo;
+
+        consultar();
+    }
+
+    function cambiarRadio(boton) {
+        document
+            .querySelectorAll('.radio')
+            .forEach(x =>
+                x.classList.remove('activo')
+            );
+
+        boton.classList.add('activo');
+
+        radioActual =
+            Number(
+                boton.dataset.radio
+            );
+
+        consultar();
+    }
+
+    function consultar() {
+        if (
+            window.AndroidMapa &&
+            window.AndroidMapa.consultar
+        ) {
+            window.AndroidMapa.consultar(
+                tipoActual,
+                radioActual
+            );
+        }
+    }
+
+    function mostrarCarga() {
+        capaEspacios.clearLayers();
+
+        document.getElementById('estado')
+            .textContent =
+            'Consultando espacios cercanos...';
+
+        actualizarContador(0);
+    }
+
+    function mostrarError(mensaje) {
+        capaEspacios.clearLayers();
+
+        document.getElementById('estado')
+            .textContent =
+            mensaje;
+
+        actualizarContador(0);
+    }
+
+    function recibirEspacios(espacios) {
+        capaEspacios.clearLayers();
+
+        const lista =
+            Array.isArray(espacios)
+                ? espacios
+                : [];
+
+        lista.forEach(espacio => {
+            const lat =
+                Number(
+                    espacio.latitud
+                );
+
+            const lon =
+                Number(
+                    espacio.longitud
+                );
+
+            let clase = 'otro';
+            let simbolo = '&#128205;';
+
+            const tipo =
+                String(
+                    espacio.tipo || ''
+                ).toLowerCase();
 
             if (
-                !Number.isFinite(latitud) ||
-                !Number.isFinite(longitud) ||
-                latitud < -90 ||
-                latitud > 90 ||
-                longitud < -180 ||
-                longitud > 180
+                tipo.includes('universidad')
             ) {
-                console.warn(
-                    'Coordenadas inválidas para el espacio:',
-                    espacio.id
-                );
-                return;
+                clase = 'universidad';
+                simbolo = '&#127891;';
+            } else if (
+                tipo.includes('biblioteca')
+            ) {
+                clase = 'biblioteca';
+                simbolo = '&#128218;';
+            } else if (
+                tipo.includes('colegio') ||
+                tipo.includes('escuela')
+            ) {
+                clase = 'colegio';
+                simbolo = '&#127979;';
             }
 
-            agregarEspacioEducativo(
-                espacio.id,
-                espacio.nombre || 'Espacio educativo',
-                espacio.direccion || 'Dirección no disponible',
-                espacio.tipo || 'Tipo no especificado',
-                latitud,
-                longitud
+            const nombre =
+                espacio.nombre ||
+                'Espacio educativo';
+
+            const popup =
+                '<div class="popup-titulo">' +
+                escapar(nombre) +
+                '</div>' +
+
+                '<div class="popup-linea">' +
+                '<b>Tipo:</b> ' +
+                escapar(
+                    espacio.tipo ||
+                    'Espacio educativo'
+                ) +
+                '</div>' +
+
+                '<div class="popup-linea">' +
+                '<b>Direcci&oacute;n:</b> ' +
+                escapar(
+                    espacio.direccion ||
+                    'No disponible'
+                ) +
+                '</div>' +
+
+                '<div class="distancia">' +
+                'A ' +
+                Number(
+                    espacio.distanciaKm
+                ).toFixed(1) +
+                ' km de ti' +
+                '</div>' +
+
+                '<button class="navegar" ' +
+                'onclick="navegar(' +
+                lat + ',' +
+                lon + ',' +
+                JSON.stringify(nombre)
+                    .replace(/"/g,'&quot;') +
+                ')">' +
+                'C&oacute;mo llegar' +
+                '</button>';
+
+            L.marker(
+                [lat,lon],
+                {
+                    icon:
+                        pin(
+                            clase,
+                            simbolo
+                        )
+                }
+            )
+            .addTo(capaEspacios)
+            .bindPopup(
+                popup
             );
         });
 
-        // Ajustar el mapa para mostrar los marcadores recibidos.
-        const coordenadas = [];
+        document.getElementById('estado')
+            .textContent =
+            lista.length === 1
+                ? '1 espacio encontrado.'
+                : lista.length +
+                  ' espacios encontrados.';
 
-        marcadoresEspacios.eachLayer(function (marcador) {
-            coordenadas.push(marcador.getLatLng());
-        });
+        actualizarContador(
+            lista.length
+        );
+    }
 
-        if (coordenadas.length === 1) {
-            mapa.setView(coordenadas[0], 15);
-        } else if (coordenadas.length > 1) {
-            mapa.fitBounds(
-                L.latLngBounds(coordenadas),
-                {
-                    padding: [30, 30],
-                    maxZoom: 15
-                }
+    function navegar(
+        lat,
+        lon,
+        nombre
+    ) {
+        if (
+            window.AndroidMapa &&
+            window.AndroidMapa.navegar
+        ) {
+            window.AndroidMapa.navegar(
+                Number(lat),
+                Number(lon),
+                String(nombre)
             );
         }
+    }
+
+    function actualizarContador(total) {
+        document.getElementById('contador')
+            .textContent =
+            total === 1
+                ? '1 lugar'
+                : total +
+                  ' lugares';
     }
 </script>
 
 </body>
-
 </html>

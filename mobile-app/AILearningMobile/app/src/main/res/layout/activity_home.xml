@@ -1,118 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="32dp">
-
-        <TextView
-            android:id="@+id/textBienvenida"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bienvenido a NexaLearn"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:id="@+id/textUsuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Usuario"
-            android:textSize="18sp"
-            android:layout_marginBottom="32dp" />
-
-        <Button
-            android:id="@+id/btnBuscarUsuario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Buscar usuario"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnCursos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Catálogo de cursos"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnMisCursos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mis cursos"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnGestionarActividades"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gestionar actividades"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnCalificarActividades"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calificar actividades"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone" />
-
-        <Button
-
-            android:id="@+id/btnCertificados"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Mis certificados"
-            android:textAllCaps="false"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone"
-
-            />
-
-        <Button
-
-            android:id="@+id/btnEspaciosEducativos"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-
-            android:text = "Espacios educativos cercanos"
-            android:textAllCaps="false"
-
-            android:layout_marginBottom="16dp"
-            android:visibility="gone"
-
-            />
-
-
-        <Button
-
-            android:id="@+id/btnCerrarSesion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cerrar sesión"
-            android:textAllCaps="false"
-
-            />
-
-    </LinearLayout>
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FAF7FC">
+  <LinearLayout android:id="@+id/main" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_horizontal" android:padding="32dp">
+    <TextView android:id="@+id/textBienvenida" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bienvenido a NexaLearn" android:textSize="28sp" android:textStyle="bold" android:gravity="center" android:layout_marginTop="80dp" android:layout_marginBottom="10dp" android:textColor="#4B4453" />
+    <TextView android:id="@+id/textUsuario" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Usuario" android:textSize="18sp" android:layout_marginBottom="32dp" />
+    <Button android:id="@+id/btnBuscarUsuario" android:layout_width="match_parent" android:layout_height="54dp" android:text="Buscar usuario" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnCursos" android:layout_width="match_parent" android:layout_height="54dp" android:text="Catálogo de cursos" android:textAllCaps="false" android:layout_marginBottom="8dp" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnMisCursos" android:layout_width="match_parent" android:layout_height="54dp" android:text="Mis cursos" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnGestionarActividades" android:layout_width="match_parent" android:layout_height="54dp" android:text="Gestionar actividades" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnCalificarActividades" android:layout_width="match_parent" android:layout_height="54dp" android:text="Calificar actividades" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnCertificados" android:layout_width="match_parent" android:layout_height="54dp" android:text="Mis certificados" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnEspaciosEducativos" android:layout_height="54dp" android:layout_width="match_parent" android:text="Espacios educativos cercanos" android:textAllCaps="false" android:layout_marginBottom="8dp" android:visibility="gone" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+    <Button android:id="@+id/btnCerrarSesion" android:layout_width="match_parent" android:layout_height="54dp" android:text="Cerrar sesión" android:textAllCaps="false" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" android:layout_marginTop="8dp" android:layout_marginBottom="8dp" android:backgroundTint="#6D50B4" android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold" android:paddingStart="16dp" android:paddingEnd="16dp" />
+  </LinearLayout>
 </ScrollView>

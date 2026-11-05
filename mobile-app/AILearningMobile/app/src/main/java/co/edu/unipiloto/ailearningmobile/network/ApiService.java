@@ -133,4 +133,20 @@ public interface ApiService {
     @GET("api/espacios-educativos")
     Call<List<EspacioEducativoResponse>> obtenerEspaciosEducativos();
 
+
+    @retrofit2.http.GET("api/geolocalizacion/cercanos")
+    retrofit2.Call<okhttp3.ResponseBody> obtenerEspaciosCercanos(
+            @retrofit2.http.Query("lat") double latitud,
+            @retrofit2.http.Query("lon") double longitud,
+            @retrofit2.http.Query("radio") int radio,
+            @retrofit2.http.Query("tipo") String tipo
+    );
+
+    @GET("api/espacios-educativos/cercanos")
+    Call<java.util.List<co.edu.unipiloto.ailearningmobile.dto.EspacioEducativoCercanoResponse>> obtenerEspaciosCercanosCache(
+            @Query("lat") double latitud,
+            @Query("lon") double longitud,
+            @Query("radioKm") double radioKm,
+            @Query("tipo") String tipo
+    );
 }
