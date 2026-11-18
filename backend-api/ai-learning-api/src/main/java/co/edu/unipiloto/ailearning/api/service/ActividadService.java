@@ -1,6 +1,7 @@
 package co.edu.unipiloto.ailearning.api.service;
 
 import co.edu.unipiloto.ailearning.api.dto.ActividadResponse;
+import co.edu.unipiloto.ailearning.api.dto.ActividadRequest;
 import co.edu.unipiloto.ailearning.api.exception.AccesoDenegadoException;
 import co.edu.unipiloto.ailearning.api.model.*;
 import co.edu.unipiloto.ailearning.api.repository.*;
@@ -34,7 +35,7 @@ public class ActividadService {
 
     public ActividadResponse crearActividad(
             Long cursoId,
-            Actividad actividad,
+            ActividadRequest datos,
             Long actorId) {
 
         validarPermiso(actorId);
@@ -45,8 +46,12 @@ public class ActividadService {
                                 HttpStatus.NOT_FOUND,
                                 "El curso no existe"));
 
-        validarActividad(actividad);
+        validarActividad(datos);
 
+        Actividad actividad = new Actividad();
+        actividad.setDescripcion(datos.descripcion());
+        actividad.setFecha(datos.fecha());
+        actividad.setPonderacion(datos.ponderacion());
         actividad.setCurso(curso);
 
         return convertirAResponse(
@@ -75,7 +80,7 @@ public class ActividadService {
 
     public ActividadResponse actualizar(
             Long id,
-            Actividad datos,
+            ActividadRequest datos,
             Long actorId) {
 
         validarPermiso(actorId);
@@ -83,9 +88,9 @@ public class ActividadService {
 
         Actividad actividad = buscarActividad(id);
 
-        actividad.setDescripcion(datos.getDescripcion());
-        actividad.setFecha(datos.getFecha());
-        actividad.setPonderacion(datos.getPonderacion());
+        actividad.setDescripcion(datos.descripcion());
+        actividad.setFecha(datos.fecha());
+        actividad.setPonderacion(datos.ponderacion());
 
         return convertirAResponse(
                 activityRepository.save(actividad));
@@ -133,13 +138,13 @@ public class ActividadService {
         }
     }
 
-    private void validarActividad(Actividad actividad) {
+    private void validarActividad(ActividadRequest actividad) {
 
         if (actividad == null
-                || actividad.getDescripcion() == null
-                || actividad.getDescripcion().trim().isEmpty()
-                || actividad.getFecha() == null
-                || actividad.getPonderacion() == null) {
+                || actividad.descripcion() == null
+                || actividad.descripcion().trim().isEmpty()
+                || actividad.fecha() == null
+                || actividad.ponderacion() == null) {
 
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,

@@ -120,6 +120,7 @@ public class ProgresoService {
         return new ProgresoCursoResponse(curso.getId(), curso.getNombre(), totalModulos, completados, pendientes, porcentaje, detalleModulos);
     }
 
+    @Transactional(readOnly = true)
     public List<CursoProgresoResumenResponse> obtenerMisCursos(Long usuarioId) {
 
         Usuario usuario = usuarioRepository.findById(usuarioId)

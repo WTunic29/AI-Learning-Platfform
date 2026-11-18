@@ -1,7 +1,7 @@
 package co.edu.unipiloto.ailearning.api.controller;
 
 import co.edu.unipiloto.ailearning.api.dto.ActividadResponse;
-import co.edu.unipiloto.ailearning.api.model.Actividad;
+import co.edu.unipiloto.ailearning.api.dto.ActividadRequest;
 import co.edu.unipiloto.ailearning.api.service.ActividadService;
 
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class ActividadController {
     public ResponseEntity<ActividadResponse> crearActividad(
             @PathVariable Long cursoId,
             @RequestParam Long actorId,
-            @RequestBody Actividad actividad) {
+            @RequestBody ActividadRequest actividad) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -56,7 +56,7 @@ public class ActividadController {
     public ResponseEntity<ActividadResponse> actualizar(
             @PathVariable Long id,
             @RequestParam Long actorId,
-            @RequestBody Actividad actividad) {
+            @RequestBody ActividadRequest actividad) {
 
         return ResponseEntity.ok(
                 actividadService.actualizar(

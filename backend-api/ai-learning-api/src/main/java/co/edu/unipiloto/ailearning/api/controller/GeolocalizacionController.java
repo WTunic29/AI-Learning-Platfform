@@ -41,6 +41,7 @@ public class GeolocalizacionController {
         ResponseEntity<String> respuesta = intentar(OVERPASS_PRINCIPAL, consulta);
         if (respuesta.getStatusCode().is2xxSuccessful()) return respuesta;
 
+        if (Thread.currentThread().isInterrupted()) return respuesta;
         respuesta = intentar(OVERPASS_RESPALDO, consulta);
         if (respuesta.getStatusCode().is2xxSuccessful()) return respuesta;
 
@@ -74,7 +75,10 @@ public class GeolocalizacionController {
 
             System.out.println("Overpass HTTP " + response.statusCode() + " en " + endpoint);
             return ResponseEntity.status(response.statusCode()).body("{}");
-        } catch (Exception ex) {
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            return ResponseEntity.status(503).body("{}");
+        } catch (java.io.IOException ex) {
             System.out.println("Fallo Overpass " + endpoint + ": " + ex.getMessage());
             return ResponseEntity.status(502).body("{}");
         }
