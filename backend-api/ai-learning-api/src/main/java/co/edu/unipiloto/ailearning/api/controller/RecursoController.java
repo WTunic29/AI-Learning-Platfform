@@ -5,6 +5,7 @@ import co.edu.unipiloto.ailearning.api.dto.RecursoCrudResponse;
 import co.edu.unipiloto.ailearning.api.service.RecursoService;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +67,22 @@ public class RecursoController {
                 recursoService.actualizar(id, request)
         );
     }
+    @GetMapping("/{id}/descargar")
+    public ResponseEntity<Void> descargar(
+            @PathVariable Long id) {
+
+        RecursoCrudResponse recurso =
+                recursoService.obtenerPorId(id);
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .header(
+                        HttpHeaders.LOCATION,
+                        recurso.getUrl()
+                )
+                .build();
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(

@@ -6,6 +6,9 @@ import java.time.LocalDate;
 public record ActividadRequest(
         String descripcion,
         LocalDate fecha,
-        BigDecimal ponderacion
+        BigDecimal ponderacion,
+        String tipo,
+        LocalDate fechaApertura,
+        LocalDate fechaCierre
 ) {
 }

@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ActividadService {
+
+    private static final Set<String> TIPOS_VALIDOS =
+            Set.of("TALLER", "EVALUACION", "TAREA");
 
     private final ActivityRepository activityRepository;
     private final CursoRepository cursoRepository;
@@ -49,22 +53,44 @@ public class ActividadService {
         validarActividad(datos);
 
         Actividad actividad = new Actividad();
+
         actividad.setDescripcion(datos.descripcion());
         actividad.setFecha(datos.fecha());
         actividad.setPonderacion(datos.ponderacion());
+
+        actividad.setTipo(
+                datos.tipo() == null
+                        ? "TAREA"
+                        : datos.tipo().trim().toUpperCase()
+        );
+
+        actividad.setFechaApertura(
+                datos.fechaApertura() != null
+                        ? datos.fechaApertura()
+                        : datos.fecha()
+        );
+
+        actividad.setFechaCierre(
+                datos.fechaCierre() != null
+                        ? datos.fechaCierre()
+                        : datos.fecha()
+        );
+
         actividad.setCurso(curso);
 
         return convertirAResponse(
-                activityRepository.save(actividad));
+                activityRepository.save(actividad)
+        );
     }
 
     public ActividadResponse obtenerPorId(Long id) {
-
         return convertirAResponse(
-                buscarActividad(id));
+                buscarActividad(id)
+        );
     }
 
-    public List<ActividadResponse> obtenerActividades(Long cursoId) {
+    public List<ActividadResponse> obtenerActividades(
+            Long cursoId) {
 
         if (!cursoRepository.existsById(cursoId)) {
             throw new ResponseStatusException(
@@ -92,8 +118,27 @@ public class ActividadService {
         actividad.setFecha(datos.fecha());
         actividad.setPonderacion(datos.ponderacion());
 
+        actividad.setTipo(
+                datos.tipo() == null
+                        ? actividad.getTipo()
+                        : datos.tipo().trim().toUpperCase()
+        );
+
+        actividad.setFechaApertura(
+                datos.fechaApertura() != null
+                        ? datos.fechaApertura()
+                        : datos.fecha()
+        );
+
+        actividad.setFechaCierre(
+                datos.fechaCierre() != null
+                        ? datos.fechaCierre()
+                        : datos.fecha()
+        );
+
         return convertirAResponse(
-                activityRepository.save(actividad));
+                activityRepository.save(actividad)
+        );
     }
 
     public void eliminar(Long id, Long actorId) {
@@ -105,10 +150,13 @@ public class ActividadService {
         try {
             activityRepository.delete(actividad);
             activityRepository.flush();
+
         } catch (DataIntegrityViolationException e) {
+
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "No se puede eliminar la actividad porque tiene calificaciones asociadas");
+                    "No se puede eliminar la actividad porque tiene calificaciones asociadas"
+            );
         }
     }
 
@@ -138,7 +186,8 @@ public class ActividadService {
         }
     }
 
-    private void validarActividad(ActividadRequest actividad) {
+    private void validarActividad(
+            ActividadRequest actividad) {
 
         if (actividad == null
                 || actividad.descripcion() == null
@@ -150,6 +199,34 @@ public class ActividadService {
                     HttpStatus.BAD_REQUEST,
                     "descripcion, fecha y ponderacion son obligatorios");
         }
+
+        if (actividad.ponderacion().signum() <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La ponderacion debe ser mayor a cero"
+            );
+        }
+
+        if (actividad.tipo() != null &&
+                !TIPOS_VALIDOS.contains(
+                        actividad.tipo().trim().toUpperCase())) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Tipo de actividad invalido. Use TALLER, EVALUACION o TAREA"
+            );
+        }
+
+        if (actividad.fechaApertura() != null &&
+                actividad.fechaCierre() != null &&
+                actividad.fechaCierre()
+                        .isBefore(actividad.fechaApertura())) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "La fecha de cierre no puede ser anterior a la fecha de apertura"
+            );
+        }
     }
 
     private ActividadResponse convertirAResponse(
@@ -160,6 +237,10 @@ public class ActividadService {
                 actividad.getCurso().getId(),
                 actividad.getDescripcion(),
                 actividad.getFecha(),
-                actividad.getPonderacion());
+                actividad.getPonderacion(),
+                actividad.getTipo(),
+                actividad.getFechaApertura(),
+                actividad.getFechaCierre()
+        );
     }
 }
