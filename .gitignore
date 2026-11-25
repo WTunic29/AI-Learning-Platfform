@@ -1,1 +1,8 @@
 .idea/
+
+_backup_ui_home/
+_backup_ui_login/
+backend-api/ai-learning-api/uploads/
+*.bak_android_final
+*.bak_pre_centro
+*.antes_fix_centro_academico
