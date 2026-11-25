@@ -66,6 +66,10 @@
             android:name=".RecuperarPasswordActivity"
             android:exported="false" />
 
+            <activity
+            android:name=".CentroAcademicoActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

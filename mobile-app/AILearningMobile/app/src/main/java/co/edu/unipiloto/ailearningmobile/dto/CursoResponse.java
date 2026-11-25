@@ -41,4 +41,68 @@ public class CursoResponse {
         this.categoria = categoria;
     }
 
+
+    private String objetivo;
+    private String resultadosEsperados;
+    private Integer cupoMaximo;
+    private String fechaInicio;
+    private String fechaFin;
+    private Long docenteId;
+    private String docenteNombre;
+
+    public String getObjetivo() {
+        return objetivo;
+    }
+
+    public void setObjetivo(String objetivo) {
+        this.objetivo = objetivo;
+    }
+
+    public String getResultadosEsperados() {
+        return resultadosEsperados;
+    }
+
+    public void setResultadosEsperados(String resultadosEsperados) {
+        this.resultadosEsperados = resultadosEsperados;
+    }
+
+    public Integer getCupoMaximo() {
+        return cupoMaximo;
+    }
+
+    public void setCupoMaximo(Integer cupoMaximo) {
+        this.cupoMaximo = cupoMaximo;
+    }
+
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public Long getDocenteId() {
+        return docenteId;
+    }
+
+    public void setDocenteId(Long docenteId) {
+        this.docenteId = docenteId;
+    }
+
+    public String getDocenteNombre() {
+        return docenteNombre;
+    }
+
+    public void setDocenteNombre(String docenteNombre) {
+        this.docenteNombre = docenteNombre;
+    }
 }

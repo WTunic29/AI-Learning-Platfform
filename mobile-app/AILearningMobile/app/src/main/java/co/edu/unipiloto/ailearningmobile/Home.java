@@ -14,19 +14,41 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+
+        setContentView(
+                R.layout.activity_home
+        );
+
+        /*
+         * Barra superior acorde al diseño.
+         */
+        getWindow().setStatusBarColor(
+                android.graphics.Color.rgb(
+                        9,
+                        11,
+                        24
+                )
+        );
 
         TextView textUsuario =
-                findViewById(R.id.textUsuario);
+                findViewById(
+                        R.id.textUsuario
+                );
 
         Button btnBuscarUsuario =
-                findViewById(R.id.btnBuscarUsuario);
+                findViewById(
+                        R.id.btnBuscarUsuario
+                );
 
         Button btnCursos =
-                findViewById(R.id.btnCursos);
+                findViewById(
+                        R.id.btnCursos
+                );
 
         Button btnMisCursos =
-                findViewById(R.id.btnMisCursos);
+                findViewById(
+                        R.id.btnMisCursos
+                );
 
         Button btnGestionarActividades =
                 findViewById(
@@ -43,7 +65,15 @@ public class Home extends AppCompatActivity {
                         R.id.btnCertificados
                 );
 
-        Button btnEspaciosEducativos = (findViewById(R.id.btnEspaciosEducativos));
+        Button btnCentroAcademico =
+                findViewById(
+                        R.id.btnCentroAcademico
+                );
+
+        Button btnEspacios =
+                findViewById(
+                        R.id.btnEspacios
+                );
 
         Button btnCerrarSesion =
                 findViewById(
@@ -52,7 +82,9 @@ public class Home extends AppCompatActivity {
 
         String nombre =
                 getIntent()
-                        .getStringExtra("nombre");
+                        .getStringExtra(
+                                "nombre"
+                        );
 
         long usuarioId =
                 getIntent()
@@ -63,35 +95,65 @@ public class Home extends AppCompatActivity {
 
         String rol =
                 getIntent()
-                        .getStringExtra("rol");
+                        .getStringExtra(
+                                "rol"
+                        );
 
-        if (nombre != null
-                && !nombre.isEmpty()) {
+        if (
+                nombre != null
+                        &&
+                !nombre.isEmpty()
+        ) {
 
             textUsuario.setText(
-                    "Bienvenido, " + nombre
+                    nombre
+                            + " • "
+                            + (
+                            rol != null
+                                    ? rol
+                                    : "Usuario"
+                    )
             );
         }
 
+        /*
+         * Todas las opciones específicas
+         * empiezan ocultas.
+         */
         btnBuscarUsuario
-                .setVisibility(View.GONE);
+                .setVisibility(
+                        View.GONE
+                );
 
         btnMisCursos
-                .setVisibility(View.GONE);
+                .setVisibility(
+                        View.GONE
+                );
 
         btnGestionarActividades
-                .setVisibility(View.GONE);
+                .setVisibility(
+                        View.GONE
+                );
 
         btnCalificarActividades
-                .setVisibility(View.GONE);
+                .setVisibility(
+                        View.GONE
+                );
 
         btnCertificados
-                .setVisibility(View.GONE);
+                .setVisibility(
+                        View.GONE
+                );
 
-        btnEspaciosEducativos.setVisibility(View.GONE);
-
-        if ("ESTUDIANTE"
-                .equalsIgnoreCase(rol)) {
+        /*
+         * ESTUDIANTE
+         */
+        if (
+                "ESTUDIANTE"
+                        .equalsIgnoreCase(
+                                rol
+                        )
+        ) {
 
             btnMisCursos
                     .setVisibility(
@@ -102,11 +164,17 @@ public class Home extends AppCompatActivity {
                     .setVisibility(
                             View.VISIBLE
                     );
+        }
 
-            btnEspaciosEducativos.setVisibility(View.VISIBLE);
-
-        } else if ("DOCENTE"
-                .equalsIgnoreCase(rol)) {
+        /*
+         * DOCENTE
+         */
+        else if (
+                "DOCENTE"
+                        .equalsIgnoreCase(
+                                rol
+                        )
+        ) {
 
             btnGestionarActividades
                     .setVisibility(
@@ -117,11 +185,22 @@ public class Home extends AppCompatActivity {
                     .setVisibility(
                             View.VISIBLE
                     );
+        }
 
-        } else if (
-                "ADMIN".equalsIgnoreCase(rol)
-                        || "SUPERADMIN"
-                        .equalsIgnoreCase(rol)) {
+        /*
+         * ADMIN
+         */
+        else if (
+                "ADMIN"
+                        .equalsIgnoreCase(
+                                rol
+                        )
+                        ||
+                "SUPERADMIN"
+                        .equalsIgnoreCase(
+                                rol
+                        )
+        ) {
 
             btnBuscarUsuario
                     .setVisibility(
@@ -129,25 +208,12 @@ public class Home extends AppCompatActivity {
                     );
         }
 
-        btnBuscarUsuario
-                .setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(
-                            Home.this,
-                            BuscarUsuarioActivity.class
-                    );
-
-            intent.putExtra(
-                    "usuarioId",
-                    usuarioId
-            );
-
-            startActivity(intent);
-        });
-
+        /*
+         * CATÁLOGO
+         */
         btnCursos
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -160,11 +226,17 @@ public class Home extends AppCompatActivity {
                     usuarioId
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
 
+        /*
+         * MIS CURSOS
+         */
         btnMisCursos
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -177,11 +249,40 @@ public class Home extends AppCompatActivity {
                     usuarioId
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
 
+        /*
+         * ADMIN USUARIOS
+         */
+        btnBuscarUsuario
+                .setOnClickListener(
+                        v -> {
+
+            Intent intent =
+                    new Intent(
+                            Home.this,
+                            BuscarUsuarioActivity.class
+                    );
+
+            intent.putExtra(
+                    "usuarioId",
+                    usuarioId
+            );
+
+            startActivity(
+                    intent
+            );
+        });
+
+        /*
+         * ACTIVIDADES
+         */
         btnGestionarActividades
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -194,11 +295,17 @@ public class Home extends AppCompatActivity {
                     usuarioId
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
 
+        /*
+         * CALIFICACIONES
+         */
         btnCalificarActividades
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -211,11 +318,17 @@ public class Home extends AppCompatActivity {
                     usuarioId
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
 
+        /*
+         * CERTIFICADOS
+         */
         btnCertificados
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -233,20 +346,69 @@ public class Home extends AppCompatActivity {
                     1L
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
 
-        btnEspaciosEducativos.setOnClickListener(v -> {
+        /*
+         * CENTRO ACADÉMICO
+         */
+        btnCentroAcademico
+                .setOnClickListener(
+                        v -> {
 
-            Intent intent = new Intent(Home.this, MapaEspaciosEducativosActivity.class);
-            intent.putExtra("usuarioId", usuarioId);
+            Intent intent =
+                    new Intent(
+                            Home.this,
+                            CentroAcademicoActivity.class
+                    );
 
-            startActivity(intent);
+            intent.putExtra(
+                    "usuarioId",
+                    usuarioId
+            );
 
+            intent.putExtra(
+                    "rol",
+                    rol
+            );
+
+            startActivity(
+                    intent
+            );
         });
 
+        /*
+         * GEOLOCALIZACIÓN /
+         * ESPACIOS EDUCATIVOS
+         */
+        btnEspacios
+                .setOnClickListener(
+                        v -> {
+
+            Intent intent =
+                    new Intent(
+                            Home.this,
+                            MapaEspaciosEducativosActivity.class
+                    );
+
+            intent.putExtra(
+                    "usuarioId",
+                    usuarioId
+            );
+
+            startActivity(
+                    intent
+            );
+        });
+
+        /*
+         * CERRAR SESIÓN
+         */
         btnCerrarSesion
-                .setOnClickListener(v -> {
+                .setOnClickListener(
+                        v -> {
 
             Intent intent =
                     new Intent(
@@ -256,10 +418,35 @@ public class Home extends AppCompatActivity {
 
             intent.setFlags(
                     Intent.FLAG_ACTIVITY_NEW_TASK
-                            | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            |
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
             );
 
-            startActivity(intent);
+            startActivity(
+                    intent
+            );
         });
+
+        /*
+         * Animación de entrada.
+         */
+        View contenido =
+                findViewById(
+                        R.id.main
+                );
+
+        contenido.setAlpha(
+                0f
+        );
+
+        contenido.setTranslationY(
+                40f
+        );
+
+        contenido.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(650)
+                .start();
     }
 }

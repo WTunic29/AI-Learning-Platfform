@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="20dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Centro académico NexaLearn" android:textSize="24sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/textUsuarioCentro" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="12dp"/>
+        <EditText android:id="@+id/editCursoId" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="ID del curso (ej. 1)" android:inputType="number"/>
+        <EditText android:id="@+id/editActividadId" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="ID de actividad (ej. 7)" android:inputType="number"/>
+        <Button android:id="@+id/btnNotificaciones" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Mis notificaciones"/>
+        <Button android:id="@+id/btnActividades" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver actividades del curso"/>
+        <Button android:id="@+id/btnSeleccionarArchivo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Seleccionar archivo de entrega"/>
+        <Button android:id="@+id/btnEntregar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Entregar actividad"/>
+        <EditText android:id="@+id/editMotivoReclamo" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Motivo del reclamo" android:minLines="2"/>
+        <Button android:id="@+id/btnCrearReclamo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Crear reclamo"/>
+        <Button android:id="@+id/btnVerReclamos" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver mis reclamos"/>
+        <EditText android:id="@+id/editMensajeForo" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Mensaje para el foro" android:minLines="2"/>
+        <Button android:id="@+id/btnEnviarForo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Publicar en foro"/>
+        <Button android:id="@+id/btnVerForo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver foro"/>
+        <Button android:id="@+id/btnReporte" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Reporte general"/>
+        <Button android:id="@+id/btnRecursos" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Ver / abrir recursos"/>
+        <TextView android:id="@+id/textResultado" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:textIsSelectable="true" android:textSize="15sp"/>
+    </LinearLayout>
+</ScrollView>

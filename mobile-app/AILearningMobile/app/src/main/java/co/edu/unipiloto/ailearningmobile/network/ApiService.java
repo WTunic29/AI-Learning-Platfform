@@ -8,10 +8,13 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.POST;
 import okhttp3.ResponseBody;
+import okhttp3.MultipartBody;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Multipart;
+import retrofit2.http.Part;
 import java.util.List;
 
 //retrofit implementa las operaciones para inicio de sesion
@@ -149,4 +152,69 @@ public interface ApiService {
             @Query("radioKm") double radioKm,
             @Query("tipo") String tipo
     );
+
+    // ==============================
+    // CENTRO ACADEMICO - NEXALEARN
+    // ==============================
+
+    @GET("api/notificaciones/usuario/{usuarioId}")
+    Call<List<NotificacionResponse>> obtenerNotificaciones(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @GET("api/notificaciones/usuario/{usuarioId}/no-leidas")
+    Call<java.util.Map<String, Integer>> contarNotificacionesNoLeidas(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @PUT("api/notificaciones/{id}/leer")
+    Call<NotificacionResponse> marcarNotificacionLeida(
+            @Path("id") Long id
+    );
+
+    @Multipart
+    @POST("api/entregas/actividad/{actividadId}/estudiante/{estudianteId}")
+    Call<EntregaActividadResponse> entregarActividad(
+            @Path("actividadId") Long actividadId,
+            @Path("estudianteId") Long estudianteId,
+            @Part MultipartBody.Part archivo
+    );
+
+    @GET("api/entregas/actividad/{actividadId}")
+    Call<List<EntregaActividadResponse>> obtenerEntregasActividad(
+            @Path("actividadId") Long actividadId
+    );
+
+    @POST("api/reclamos")
+    Call<ReclamoResponse> crearReclamo(
+            @Body ReclamoRequest request
+    );
+
+    @GET("api/reclamos/estudiante/{estudianteId}")
+    Call<List<ReclamoResponse>> obtenerReclamosEstudiante(
+            @Path("estudianteId") Long estudianteId
+    );
+
+    @PUT("api/reclamos/{id}/respuesta")
+    Call<ReclamoResponse> responderReclamo(
+            @Path("id") Long id,
+            @Body RespuestaReclamoRequest request
+    );
+
+    @POST("api/foros/curso/{cursoId}")
+    Call<MensajeForoResponse> publicarMensajeForo(
+            @Path("cursoId") Long cursoId,
+            @Body MensajeForoRequest request
+    );
+
+    @GET("api/foros/curso/{cursoId}")
+    Call<List<MensajeForoResponse>> obtenerForoCurso(
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/reportes/resumen")
+    Call<ReporteResumenResponse> obtenerReporteResumen();
+
+    @GET("api/recursos")
+    Call<List<RecursoNexaResponse>> obtenerRecursosNexa();
 }

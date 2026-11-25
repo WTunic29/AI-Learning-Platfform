@@ -9,6 +9,10 @@ public class ActividadResponse {
     private String fecha;
     private BigDecimal ponderacion;
 
+    private String tipo;
+    private String fechaApertura;
+    private String fechaCierre;
+
     public ActividadResponse() {
     }
 
@@ -52,4 +56,27 @@ public class ActividadResponse {
         this.ponderacion = ponderacion;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getFechaApertura() {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(String fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public String getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(String fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
 }

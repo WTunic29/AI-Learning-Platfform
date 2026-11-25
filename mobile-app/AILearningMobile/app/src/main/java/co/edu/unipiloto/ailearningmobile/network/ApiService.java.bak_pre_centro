@@ -1,0 +1,152 @@
+package co.edu.unipiloto.ailearningmobile.network;
+
+import co.edu.unipiloto.ailearningmobile.dto.CursoProgresoResumenResponse;
+import co.edu.unipiloto.ailearningmobile.dto.*;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.POST;
+import okhttp3.ResponseBody;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import java.util.List;
+
+//retrofit implementa las operaciones para inicio de sesion
+public interface ApiService {
+
+    @POST("api/auth/login") //cuando alguien ejecuta el login, hace una peticion hacia la ruta
+    Call<LoginResponse> login(@Body LoginRequest request); //el request se convierte en el JSON de la peticion HTTP
+    @POST("api/auth/register")
+    Call<ResponseBody> register(@Body RegisterRequest request);
+    @PUT("api/usuarios/{id}/rol")
+    Call<ResponseBody> cambiarRol(@Path("id") Long id, @Query("actorId") Long actorId, @Body CambiarRolRequest request);
+
+    @GET("api/usuarios/buscar")
+    Call<List<UsuarioResponse>> buscarUsuarios(
+            @Query("termino") String termino
+    );
+
+    @DELETE("api/usuarios/{id}")
+    Call<Void> eliminarUsuario(
+            @Path("id") Long id,
+            @Query("actorId") Long actorId
+    );
+
+    @GET("api/cursos")
+    Call<List<CursoResponse>> obtenerCursos();
+
+    @GET("api/cursos/buscar")
+    Call<List<CursoResponse>> buscarCursos(
+            @Query("termino") String termino
+    );
+
+    @POST("api/inscripciones/{usuarioId}/{cursoId}")
+    Call<InscripcionResponse> inscribirCurso(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/inscripciones/usuario/{usuarioId}")
+    Call<List<InscripcionResponse>> obtenerInscripciones(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @GET("api/contenidos/usuario/{usuarioId}/curso/{cursoId}")
+    Call<List<ModuloResponse>> obtenerContenidoCurso(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @POST("api/actividades/curso/{cursoId}")
+    Call<ActividadResponse> crearActividad(@Path("cursoId") Long cursoId,
+            @Query("actorId") Long actorId, @Body CrearActividadRequest request);
+
+    @GET("api/actividades/curso/{cursoId}")
+    Call<List<ActividadResponse>> obtenerActividadesCurso(
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/calificaciones/curso/{cursoId}/estudiantes")
+    Call<List<EstudianteCursoResponse>> obtenerEstudiantesCurso(
+            @Path("cursoId") Long cursoId,
+            @Query("actorId") Long actorId
+    );
+
+    @POST("api/calificaciones/actividad/{actividadId}")
+    Call<CalificacionResponse> registrarCalificacion(
+            @Path("actividadId") Long actividadId,
+            @Query("actorId") Long actorId,
+            @Body RegistrarCalificacionRequest request
+    );
+
+    @GET("api/calificaciones/actividad/{actividadId}")
+    Call<List<CalificacionResponse>> obtenerCalificacionesActividad(
+            @Path("actividadId") Long actividadId
+    );
+
+    @POST("api/progreso/usuario/{usuarioId}/modulo/{moduloId}")
+    Call<Void> marcarModuloCompletado(@Path("usuarioId") Long usuarioId, @Path("moduloId") Long moduloId);
+    @GET("api/progreso/usuario/{usuarioId}/curso/{cursoId}")
+    Call<ProgresoCursoResponse> obtenerProgresoCurso(@Path("usuarioId") Long usuarioId, @Path("cursoId") Long cursoId);
+
+    @POST("api/certificados/usuario/{usuarioId}/curso/{cursoId}")
+    Call<CertificadoResponse> generarCertificado(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @GET("api/certificados/usuario/{usuarioId}")
+    Call<List<CertificadoResponse>> obtenerCertificados(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @GET("api/certificados/{certificadoId}/pdf")
+    Call<okhttp3.ResponseBody> descargarCertificado(
+            @Path("certificadoId") Long certificadoId,
+            @Query("usuarioId") Long usuarioId
+    );
+
+    @GET("api/progreso/usuario/{usuarioId}/cursos")
+    Call<List<CursoProgresoResumenResponse>> obtenerMisCursos(
+            @Path("usuarioId") Long usuarioId
+    );
+
+    @GET("api/calificaciones/usuario/{usuarioId}/curso/{cursoId}")
+    Call<List<MiCalificacionResponse>> obtenerMisCalificaciones(
+            @Path("usuarioId") Long usuarioId,
+            @Path("cursoId") Long cursoId
+    );
+
+    @POST("api/auth/password/solicitar")
+    Call<SolicitarRecuperacionResponse> solicitarRecuperacion(
+            @Body SolicitarRecuperacionRequest request
+    );
+
+    @POST("api/auth/password/restablecer")
+    Call<ResponseBody> restablecerPassword(
+            @Body RestablecerPasswordRequest request
+    );
+
+    @GET("api/espacios-educativos")
+    Call<List<EspacioEducativoResponse>> obtenerEspaciosEducativos();
+
+
+    @retrofit2.http.GET("api/geolocalizacion/cercanos")
+    retrofit2.Call<okhttp3.ResponseBody> obtenerEspaciosCercanos(
+            @retrofit2.http.Query("lat") double latitud,
+            @retrofit2.http.Query("lon") double longitud,
+            @retrofit2.http.Query("radio") int radio,
+            @retrofit2.http.Query("tipo") String tipo
+    );
+
+    @GET("api/espacios-educativos/cercanos")
+    Call<java.util.List<co.edu.unipiloto.ailearningmobile.dto.EspacioEducativoCercanoResponse>> obtenerEspaciosCercanosCache(
+            @Query("lat") double latitud,
+            @Query("lon") double longitud,
+            @Query("radioKm") double radioKm,
+            @Query("tipo") String tipo
+    );
+}
